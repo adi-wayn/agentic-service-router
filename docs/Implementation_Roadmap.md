@@ -19,7 +19,7 @@ Each task below is designed to be executed as a single, atomic development unit 
     *   Implement `ClarificationQuestion` and `ServiceRouterDecision`.
 *   [x] **Task 1.3: Define LangGraph State (`src/state.py`)**
     *   Create the `TriageState` TypedDict to encapsulate inbound payload, dynamic catalogue, and states for all 6 nodes (e.g., `extracted_entities`, `missing_required_fields`, `loop_count`).
-*   [ ] **Task 1.4: Multi-Provider LLM Abstraction Layer (`src/llm/`)**
+*   [x] **Task 1.4: Multi-Provider LLM Abstraction Layer (`src/llm/`)**
     *   Define the `BaseLLMClient` interface with `generate_structured` and `generate_text`.
     *   Implement the `GeminiLLMAdapter` (and optionally Anthropic/OpenAI equivalents).
     *   Implement `LLMClientFactory` to dynamically inject the correct provider.
