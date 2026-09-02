@@ -1,5 +1,12 @@
 from typing import TypedDict, List, Dict, Any, Optional
-from src.models import ExtractedEntities, CatalogueMatchResult
+from src.models import (
+    ExtractedEntities, 
+    CatalogueMatchResult, 
+    GapAndConflictResult, 
+    ConfidenceAndRoutingResult, 
+    ClarificationState, 
+    ServiceRouterDecision
+)
 
 class TriageState(TypedDict, total=False):
     # Inbound Payload
@@ -17,23 +24,17 @@ class TriageState(TypedDict, total=False):
     match_result: Optional[CatalogueMatchResult]
     
     # Node 3: Gaps & Conflict Detection
-    missing_required_fields: List[str]
-    blocking_fields_missing: bool
-    detected_conflicts: List[str]
-    is_cross_trade_collision: bool
+    gap_result: Optional[GapAndConflictResult]
     
     # Node 4: Confidence & Action Banding
-    confidence_score: float
-    routing_action: str  # CONFIDENT_RECOMMENDATION | NEEDS_CLARIFICATION | ROUTE_TO_HUMAN
+    routing_result: Optional[ConfidenceAndRoutingResult]
     
     # Node 5: Clarification Loop Context
-    clarification_questions: List[Dict[str, Any]]
-    clarification_history: List[Dict[str, str]]
-    loop_count: int
+    clarification_state: Optional[ClarificationState]
     
     # Node 6: Finalized Audit & Output
-    decision_rationale: str
-    counterfactual_condition: str
+    final_decision: Optional[ServiceRouterDecision]
+    
+    # Shared State Machine Bookkeeping
     audit_trace: List[str]
-    final_output: Optional[Dict[str, Any]]
     error_state: Optional[str]

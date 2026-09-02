@@ -69,3 +69,18 @@ class CatalogueMatchResult(BaseModel):
         default=False, 
         description="True if top candidates span multiple trade categories with high scores"
     )
+
+class GapAndConflictResult(BaseModel):
+    missing_required_fields: List[str] = Field(default_factory=list, description="List of required intake fields missing from extraction")
+    blocking_fields_missing: bool = Field(default=False, description="True if a fundamentally blocking field is missing (e.g., location)")
+    detected_conflicts: List[str] = Field(default_factory=list, description="List of detected conflicts, including cross-trade collisions")
+    is_cross_trade_collision: bool = Field(default=False, description="True if a fatal cross-trade collision is detected")
+
+class ConfidenceAndRoutingResult(BaseModel):
+    confidence_score: float = Field(ge=0.0, le=1.0, description="Final calculated confidence score")
+    routing_action: Literal["CONFIDENT_RECOMMENDATION", "NEEDS_CLARIFICATION", "ROUTE_TO_HUMAN"] = Field(description="The determined routing action")
+
+class ClarificationState(BaseModel):
+    clarification_questions: List[ClarificationQuestion] = Field(default_factory=list, description="Currently active clarification questions")
+    clarification_history: List[Dict[str, str]] = Field(default_factory=list, description="History of Q&A during clarification loops")
+    loop_count: int = Field(default=0, description="Number of clarification loops completed")
