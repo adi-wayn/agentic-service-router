@@ -32,18 +32,12 @@ def extract_and_analyze_node(state: TriageState) -> TriageState:
             system_prompt=EXTRACTOR_SYSTEM_PROMPT
         )
         
-        # Populate the state
-        state["extracted_entities"] = extracted_entities_obj.model_dump()
-        state["stated_urgency"] = extracted_entities_obj.stated_urgency
-        state["assessed_real_urgency"] = extracted_entities_obj.assessed_real_urgency
-        state["urgency_rationale"] = extracted_entities_obj.urgency_rationale
-        
-        state["has_safety_hazard"] = extracted_entities_obj.safety_assessment.has_immediate_hazard
-        state["hazard_type"] = extracted_entities_obj.safety_assessment.hazard_type
+        # Populate the state with the Pydantic model directly
+        state["extracted_entities"] = extracted_entities_obj
         
         state["audit_trace"].append(
-            f"Extraction complete. Detected real urgency: {state['assessed_real_urgency']}. "
-            f"Hazard detected: {state['has_safety_hazard']}."
+            f"Extraction complete. Detected real urgency: {extracted_entities_obj.assessed_real_urgency}. "
+            f"Hazard detected: {extracted_entities_obj.safety_assessment.has_immediate_hazard}."
         )
         
     except Exception as e:

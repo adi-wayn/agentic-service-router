@@ -1,4 +1,5 @@
 from typing import TypedDict, List, Dict, Any, Optional
+from src.models import ExtractedEntities, CatalogueMatchResult
 
 class TriageState(TypedDict, total=False):
     # Inbound Payload
@@ -10,17 +11,10 @@ class TriageState(TypedDict, total=False):
     catalogue_templates: List[Dict[str, Any]]
     
     # Node 1: Extracted Physical Facts & Hazards
-    extracted_entities: Optional[Dict[str, Any]]
-    stated_urgency: str
-    assessed_real_urgency: str
-    urgency_rationale: str
-    has_safety_hazard: bool
-    hazard_type: Optional[str]
+    extracted_entities: Optional[ExtractedEntities]
     
     # Node 2: Template Candidate Matching
-    candidate_matches: List[Dict[str, Any]]
-    selected_candidate_id: Optional[str]
-    is_out_of_catalogue: bool
+    match_result: Optional[CatalogueMatchResult]
     
     # Node 3: Gaps & Conflict Detection
     missing_required_fields: List[str]

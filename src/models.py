@@ -39,3 +39,33 @@ class ServiceRouterDecision(BaseModel):
     what_would_change_this_call: str = Field(..., description="Counterfactual condition that would flip this call")
     loop_count: int = 0
     audit_trace: List[str] = Field(default_factory=list, description="Sequential audit ledger of reasoning steps")
+
+class CandidateMatch(BaseModel):
+    template_id: str = Field(description="Exact ID from service_catalogue.json")
+    category: str = Field(description="Trade category (e.g., HVAC, Electrical, Plumbing)")
+    signal_score: float = Field(
+        ge=0.0, le=1.0, 
+        description="Semantic signal overlap score calibrated according to the rubric (0.0 to 1.0)"
+    )
+    matched_signals: List[str] = Field(
+        default_factory=list, 
+        description="Specific signals from the template matched in the request"
+    )
+    match_rationale: str = Field(description="Brief explanation for why this score was assigned")
+
+class CatalogueMatchResult(BaseModel):
+    candidates: List[CandidateMatch] = Field(
+        description="Ranked list of evaluated candidate templates, sorted descending by signal_score"
+    )
+    top_template_id: Optional[str] = Field(
+        default=None, 
+        description="ID of the highest-scoring candidate, or null if out-of-catalogue"
+    )
+    is_out_of_catalogue: bool = Field(
+        default=False, 
+        description="True if no template in the catalogue achieves a score >= 0.40"
+    )
+    cross_trade_detected: bool = Field(
+        default=False, 
+        description="True if top candidates span multiple trade categories with high scores"
+    )

@@ -33,7 +33,7 @@ Each task below is designed to be executed as a single, atomic development unit 
 *   [x] **Task 2.1: Node 1 - Extractor & Hazard Node (`src/nodes/extractor_node.py`)**
     *   Inject the "Hazard Dominance Directive" prompt.
     *   Use `generate_structured` to populate `ExtractedEntities` and assess physical risk, overriding polite customer sentiment if life-safety is threatened.
-*   [ ] **Task 2.2: Node 2 - Template Matcher Node (`src/nodes/matcher_node.py`)**
+*   [x] **Task 2.2: Node 2 - Template Matcher Node (`src/nodes/matcher_node.py`)**
     *   Compare extracted symptoms against the JSON catalogue template signals.
     *   Calculate semantic similarity scores. Flag `is_out_of_catalogue` if max match $< 0.40$.
 *   [ ] **Task 2.3: Node 3 - Conflict & Gap Detection Node (`src/nodes/gap_node.py`)**
