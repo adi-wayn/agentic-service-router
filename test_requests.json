@@ -1,0 +1,45 @@
+{
+  "notes": "Seed set of inbound service requests, as they would arrive from a customer portal, email, or phone note. These are deliberately uneven in quality. No answer key is provided: deciding the correct template, urgency, missing fields, and whether to clarify or escalate is part of the task. You must ADD at least three more difficult or ambiguous cases of your own on top of these.",
+  "requests": [
+    {
+      "id": "REQ-001",
+      "channel": "portal",
+      "raw_text": "The air conditioning in our server room has completely stopped and the room is heating up fast. We have racks in there we can't afford to lose. Site is the Camden Street office, server room is on the 3rd floor. Someone is on site until 6pm."
+    },
+    {
+      "id": "REQ-002",
+      "channel": "email",
+      "raw_text": "Hi - one of the taps in the 4th floor kitchenette has a slow drip. Not urgent at all, just annoying. Whenever someone's next in the area is fine."
+    },
+    {
+      "id": "REQ-003",
+      "channel": "phone_note",
+      "raw_text": "Caller says about half the lights on the second floor have gone out and one of the wall sockets was sparking when they plugged in a laptop charger. They've stopped using it."
+    },
+    {
+      "id": "REQ-004",
+      "channel": "email",
+      "raw_text": "Something is leaking and it's getting worse. Can you send someone?"
+    },
+    {
+      "id": "REQ-005",
+      "channel": "portal",
+      "raw_text": "No rush at all, whenever suits you - there's water coming through the ceiling tiles in the main open-plan area and it's started dripping onto a couple of desks and a printer."
+    },
+    {
+      "id": "REQ-006",
+      "channel": "email",
+      "raw_text": "There's water dripping out of one of the ceiling light fittings in the meeting room, and now the breaker for that part of the floor keeps tripping every time we reset it. Reception, ground floor, Camden Street."
+    },
+    {
+      "id": "REQ-007",
+      "channel": "portal",
+      "raw_text": "We've got an investor walkthrough next Thursday. We need the lobby repainted and the reception chairs reupholstered before then, and ideally the big scuff on the front desk sorted too. Can your team handle this?"
+    },
+    {
+      "id": "REQ-008",
+      "channel": "email",
+      "raw_text": "The office has been getting warmer and stuffier over the last couple of weeks. The AC still runs but it doesn't seem to cool like it used to. It's not an emergency but it's uncomfortable, especially in the afternoons. Blackrock site, open-plan floor."
+    }
+  ]
+}

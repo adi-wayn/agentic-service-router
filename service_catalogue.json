@@ -1,0 +1,99 @@
+{
+  "catalogue_version": "2026-07-01",
+  "notes": "A small catalogue of Service Workflow templates used by an operations desk to dispatch field-service jobs. Each template defines a category, an urgency tier, the intake fields a dispatcher must have before the job can be scheduled, the signals that typically indicate this template, and its SLA. The catalogue is deliberately small and contains near-duplicate pairs (same category, different urgency/audience) plus obvious gaps. You are NOT expected to hard-code around it.",
+  "urgency_tiers": {
+    "P1": "Safety risk or active damage in progress. Same-day, on-call crew.",
+    "P2": "Service down or degraded, no immediate safety risk. Within 24-48h.",
+    "P3": "Routine / cosmetic / preventative. Scheduled, within 5-10 business days."
+  },
+  "templates": [
+    {
+      "id": "HVAC_EMERGENCY",
+      "name": "HVAC Emergency Repair",
+      "category": "HVAC",
+      "urgency_tier": "P1",
+      "signals": ["cooling or heating has fully failed", "server room / cold-chain / occupancy at risk", "smoke or burning smell from unit", "rapid temperature change"],
+      "required_intake_fields": ["site_location", "affected_area", "symptom", "access_window", "on_site_contact"],
+      "sla_hours": 4,
+      "delivery": "on_site",
+      "prerequisites": ["site access confirmed"]
+    },
+    {
+      "id": "HVAC_MAINT",
+      "name": "HVAC Routine Maintenance / Servicing",
+      "category": "HVAC",
+      "urgency_tier": "P3",
+      "signals": ["gradual loss of cooling/heating performance", "unit noisy or overdue for service", "filter replacement", "preventative check"],
+      "required_intake_fields": ["site_location", "unit_type", "preferred_dates"],
+      "sla_hours": 120,
+      "delivery": "on_site",
+      "prerequisites": ["equipment model known"]
+    },
+    {
+      "id": "PLUMB_LEAK",
+      "name": "Plumbing Leak / Water Ingress Response",
+      "category": "Plumbing",
+      "urgency_tier": "P1",
+      "signals": ["active water leak", "flooding", "water coming through ceiling or wall", "burst pipe", "risk of damage to property or stock"],
+      "required_intake_fields": ["site_location", "affected_area", "water_source_if_known", "is_water_still_flowing", "on_site_contact"],
+      "sla_hours": 4,
+      "delivery": "on_site",
+      "prerequisites": ["stopcock / shutoff location known or discoverable on site"]
+    },
+    {
+      "id": "PLUMB_STD",
+      "name": "Standard Plumbing Repair",
+      "category": "Plumbing",
+      "urgency_tier": "P3",
+      "signals": ["slow drip", "blocked drain, no overflow", "running toilet", "low water pressure", "no active damage"],
+      "required_intake_fields": ["site_location", "fixture", "preferred_dates"],
+      "sla_hours": 120,
+      "delivery": "on_site",
+      "prerequisites": []
+    },
+    {
+      "id": "ELEC_FAULT",
+      "name": "Electrical Fault / Power Loss Response",
+      "category": "Electrical",
+      "urgency_tier": "P1",
+      "signals": ["partial or full power loss", "sparking socket or fixture", "burning smell", "breaker repeatedly tripping", "exposed or damaged wiring"],
+      "required_intake_fields": ["site_location", "affected_circuits_or_area", "symptom", "is_there_a_safety_risk", "on_site_contact"],
+      "sla_hours": 4,
+      "delivery": "on_site",
+      "prerequisites": ["qualified electrician required"]
+    },
+    {
+      "id": "ELEC_INSTALL",
+      "name": "Electrical Installation / Fit-out",
+      "category": "Electrical",
+      "urgency_tier": "P3",
+      "signals": ["new outlets or lighting requested", "planned fit-out", "adding circuits", "no existing fault"],
+      "required_intake_fields": ["site_location", "scope_of_work", "preferred_dates", "drawings_or_spec_available"],
+      "sla_hours": 240,
+      "delivery": "on_site",
+      "prerequisites": ["scope approved", "qualified electrician required"]
+    },
+    {
+      "id": "LOCK_ACCESS",
+      "name": "Lock, Door & Access Response",
+      "category": "Security / Access",
+      "urgency_tier": "P2",
+      "signals": ["staff locked out", "door won't secure", "broken lock or handle", "access control / fob not working"],
+      "required_intake_fields": ["site_location", "door_or_entry_point", "is_the_premises_currently_unsecured", "on_site_contact"],
+      "sla_hours": 24,
+      "delivery": "on_site",
+      "prerequisites": []
+    },
+    {
+      "id": "HANDYMAN_MINOR",
+      "name": "General Handyman / Minor Repairs",
+      "category": "General",
+      "urgency_tier": "P3",
+      "signals": ["small non-specialist fixes", "furniture assembly", "hanging fixtures", "patching, adjusting, tightening", "no trade licence required"],
+      "required_intake_fields": ["site_location", "task_description", "preferred_dates"],
+      "sla_hours": 120,
+      "delivery": "on_site",
+      "prerequisites": []
+    }
+  ]
+}
