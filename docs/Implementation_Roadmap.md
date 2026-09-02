@@ -23,7 +23,7 @@ Each task below is designed to be executed as a single, atomic development unit 
     *   Define the `BaseLLMClient` interface with `generate_structured` and `generate_text`.
     *   Implement the `GeminiLLMAdapter` (and optionally Anthropic/OpenAI equivalents).
     *   Implement `LLMClientFactory` to dynamically inject the correct provider.
-*   [ ] **Task 1.5: Service Catalogue Ingestion (`src/catalogue.py`)**
+*   [x] **Task 1.5: Service Catalogue Ingestion (`src/catalogue.py`)**
     *   Load and parse `service_catalogue.json` into memory.
     *   Create utility methods to retrieve required fields, signal arrays, and trade definitions by Template ID.
 
