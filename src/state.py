@@ -14,9 +14,6 @@ class TriageState(TypedDict, total=False):
     channel: str
     raw_text: str
     
-    # Catalogue Context (Dynamic runtime injection)
-    catalogue_templates: List[Dict[str, Any]]
-    
     # Node 1: Extracted Physical Facts & Hazards
     extracted_entities: Optional[ExtractedEntities]
     

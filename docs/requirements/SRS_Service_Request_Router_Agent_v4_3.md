@@ -240,8 +240,7 @@ $$\text{Confidence } C = (W_{\text{signal}} \cdot S_{\text{signal}}) + (W_{\text
 
 ### FR-04: Gap Analysis & Missing Intake Identification
 
-* **FR-04.1:** Upon matching candidate templates, the system shall compare extracted entities against the template's `required_intake_fields`.  
-* **FR-04.2:** The system shall distinguish between *blocking intake gaps* (parameters without which dispatch is impossible, e.g., missing site address) and *non-blocking intake gaps* (parameters that can be gathered en route, e.g., technician contact phone in P1 crisis).
+* **FR-04.1:** Upon matching candidate templates, the system shall compare extracted entities against the template's `required_intake_fields`. Any missing required field shall inherently block dispatch and require clarification.
 
 ### FR-05: Conflict & Anomaly Detection
 

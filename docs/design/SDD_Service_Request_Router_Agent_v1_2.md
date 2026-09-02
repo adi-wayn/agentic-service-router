@@ -398,7 +398,6 @@ class CatalogueMatchResult(BaseModel):
 
 class GapAndConflictResult(BaseModel):
     missing_required_fields: List[str] = Field(default_factory=list, description="List of required intake fields missing from extraction")
-    blocking_fields_missing: bool = Field(default=False, description="True if a fundamentally blocking field is missing (e.g., location)")
     detected_conflicts: List[str] = Field(default_factory=list, description="List of detected conflicts, including cross-trade collisions")
     is_cross_trade_collision: bool = Field(default=False, description="True if a fatal cross-trade collision is detected")
 
@@ -492,81 +491,41 @@ The confidence calculation implements the formal SRS formula with non-linear pen
 
 ```python
 def calculate_calibrated_confidence(
-
     signal_score: float,
-
     required_fields: List[str],
-
     extracted_fields: Dict[str, Any],
-
     conflicts: List[str],
-
     is_cross_trade_collision: bool,
-
     is_out_of_catalogue: bool,
-
     is_p1_emergency: bool
-
 ) -> float:
-
     if is_out_of_catalogue:
-
         return 0.10
-
     if is_cross_trade_collision:
-
         return 0.30
-
         
-
     # Calculate Field Completeness Ratio
-
     if not required_fields:
-
         completeness_ratio = 1.0
-
         missing_count = 0
-
     else:
-
         present_count = sum(1 for f in required_fields if extracted_fields.get(f))
-
         missing_count = len(required_fields) - present_count
-
         completeness_ratio = present_count / len(required_fields)
-
         
-
     w_signal = 0.60
-
     w_fields = 0.40
-
     base_confidence = (w_signal * signal_score) + (w_fields * completeness_ratio)
-
     
-
     # Conflict Penalty
-
     conflict_penalty = min(0.40, len(conflicts) * 0.20)
-
     
-
-    # Dynamic Blocking Field Penalty
-
+    # Missing Field Penalty
     intake_penalty = 0.0
-
-    if not extracted_fields.get("site_location"):
-
-        intake_penalty += 0.35
-
-    elif missing_count > 0 and not is_p1_emergency:
-
-        intake_penalty += 0.15 * missing_count
-
+    if missing_count > 0:
+        intake_penalty += 0.25 * missing_count
         
-
     final_score = base_confidence - conflict_penalty - intake_penalty
-
     return max(0.0, min(1.0, round(final_score, 2)))
 ```
 

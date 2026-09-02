@@ -36,7 +36,7 @@ Each task below is designed to be executed as a single, atomic development unit 
 *   [x] **Task 2.2: Node 2 - Template Matcher Node (`src/nodes/matcher_node.py`)**
     *   Compare extracted symptoms against the JSON catalogue template signals.
     *   Calculate semantic similarity scores. Flag `is_out_of_catalogue` if max match $< 0.40$.
-*   [ ] **Task 2.3: Node 3 - Conflict & Gap Detection Node (`src/nodes/gap_node.py`)**
+*   [x] **Task 2.3: Node 3 - Conflict & Gap Detection Node (`src/nodes/gap_node.py`)**
     *   Compute exact missing required fields using set difference logic.
     *   Implement the **Algorithmic Cross-Trade Collision Detector**: Flag fatal ties if $|S_1 - S_2| \le 0.15$ across different trades.
 *   [ ] **Task 2.4: Node 4 - Confidence & Routing Node (`src/nodes/router_node.py`)**

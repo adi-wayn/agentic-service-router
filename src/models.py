@@ -60,7 +60,6 @@ class CatalogueMatchResult(BaseModel):
 
 class GapAndConflictResult(BaseModel):
     missing_required_fields: List[str] = Field(default_factory=list, description="List of required intake fields missing from extraction")
-    blocking_fields_missing: bool = Field(default=False, description="True if a fundamentally blocking field is missing (e.g., location)")
     detected_conflicts: List[str] = Field(default_factory=list, description="List of detected conflicts, including cross-trade collisions")
     is_cross_trade_collision: bool = Field(default=False, description="True if a fatal cross-trade collision is detected")
 

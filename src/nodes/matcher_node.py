@@ -3,6 +3,7 @@ from src.state import TriageState
 from src.models import CatalogueMatchResult
 from src.llm.factory import LLMClientFactory
 from src.prompts.matcher_prompt import MATCHER_SYSTEM_PROMPT, build_matcher_user_prompt
+from src.catalogue import ServiceCatalogue
 
 def catalogue_match_node(state: TriageState) -> TriageState:
     """
@@ -21,7 +22,7 @@ def catalogue_match_node(state: TriageState) -> TriageState:
     primary_trade = extracted_entities.primary_trade
     secondary_trade = extracted_entities.secondary_trade
     
-    all_templates = state.get("catalogue_templates", [])
+    all_templates = ServiceCatalogue().templates
     
     # Deterministic Pre-Filtering
     filtered_templates = []
