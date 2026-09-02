@@ -9,7 +9,7 @@ Each task below is designed to be executed as a single, atomic development unit 
 ## Phase 1: Environment & Foundational Contracts (Hours 0 – 3)
 *Objective: Establish project structure, data contracts, state representations, and LLM communication.*
 
-*   [ ] **Task 1.1: Initialize Project Structure & Configuration**
+*   [x] **Task 1.1: Initialize Project Structure & Configuration**
     *   Set up Python environment (using `uv` or `requirements.txt` for Python 3.11+).
     *   Create directory structure (`src/`, `src/llm/`, `src/nodes/`, `eval/`, `data/`).
     *   Implement `.env` loading and configure constants (e.g., `LLM_PROVIDER`, API keys).

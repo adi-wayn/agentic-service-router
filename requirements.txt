@@ -1,0 +1,5 @@
+pydantic>=2.0
+langgraph
+langchain-core
+python-dotenv
+google-genai
