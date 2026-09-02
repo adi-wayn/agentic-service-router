@@ -30,7 +30,7 @@ Each task below is designed to be executed as a single, atomic development unit 
 ## Phase 2: Core Triage Nodes - Cognitive & Algorithmic (Hours 3 – 8)
 *Objective: Build the isolated pipeline stages following the Single Responsibility Principle (SRP) mapped in the SDD.*
 
-*   [ ] **Task 2.1: Node 1 - Extractor & Hazard Node (`src/nodes/extractor_node.py`)**
+*   [x] **Task 2.1: Node 1 - Extractor & Hazard Node (`src/nodes/extractor_node.py`)**
     *   Inject the "Hazard Dominance Directive" prompt.
     *   Use `generate_structured` to populate `ExtractedEntities` and assess physical risk, overriding polite customer sentiment if life-safety is threatened.
 *   [ ] **Task 2.2: Node 2 - Template Matcher Node (`src/nodes/matcher_node.py`)**
