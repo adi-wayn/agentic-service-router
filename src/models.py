@@ -26,19 +26,7 @@ class ClarificationQuestion(BaseModel):
     question_text: str = Field(..., description="Targeted, courteous inquiry to customer")
     why_critical: str = Field(..., description="Operational justification for why this parameter is required")
 
-class ServiceRouterDecision(BaseModel):
-    request_id: str
-    selected_template_id: Optional[str] = Field(default=None, description="Matched template ID from catalogue, or null")
-    confidence_score: float = Field(..., ge=0.0, le=1.0, description="Calibrated confidence score 0.0 to 1.0")
-    routing_action: Literal["CONFIDENT_RECOMMENDATION", "NEEDS_CLARIFICATION", "ROUTE_TO_HUMAN"]
-    real_urgency: Literal["P1", "P2", "P3"]
-    extracted_intake: Dict[str, Any] = Field(default_factory=dict)
-    missing_required_fields: List[str] = Field(default_factory=list)
-    clarification_questions: List[ClarificationQuestion] = Field(default_factory=list)
-    decision_rationale: str = Field(..., description="Concise human-readable rationale")
-    what_would_change_this_call: str = Field(..., description="Counterfactual condition that would flip this call")
-    loop_count: int = 0
-    audit_trace: List[str] = Field(default_factory=list, description="Sequential audit ledger of reasoning steps")
+
 
 class CandidateMatch(BaseModel):
     template_id: str = Field(description="Exact ID from service_catalogue.json")
@@ -84,3 +72,18 @@ class ClarificationState(BaseModel):
     clarification_questions: List[ClarificationQuestion] = Field(default_factory=list, description="Currently active clarification questions")
     clarification_history: List[Dict[str, str]] = Field(default_factory=list, description="History of Q&A during clarification loops")
     loop_count: int = Field(default=0, description="Number of clarification loops completed")
+
+class ServiceRouterDecision(BaseModel):
+    request_id: str
+    
+    # Node 1-5 Encapsulated Outputs
+    extracted_entities: Optional[ExtractedEntities] = None
+    match_result: Optional[CatalogueMatchResult] = None
+    gap_result: Optional[GapAndConflictResult] = None
+    routing_result: Optional[ConfidenceAndRoutingResult] = None
+    clarification_state: Optional[ClarificationState] = None
+    
+    # Node 6 Finalizer Synthesis
+    decision_rationale: str = Field(..., description="Concise human-readable rationale")
+    what_would_change_this_call: str = Field(..., description="Counterfactual condition that would flip this call")
+    audit_trace: List[str] = Field(default_factory=list, description="Sequential audit ledger of reasoning steps")
