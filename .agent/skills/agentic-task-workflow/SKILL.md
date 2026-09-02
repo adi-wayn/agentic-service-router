@@ -20,11 +20,10 @@ You MUST follow these steps precisely in order:
 7. **Verification against Specs:** Make sure the decisions in the plan strictly align with the SRS and SDD. Modify the SRS/SDD if necessary and agreed upon.
 8. **Step-by-Step Implementation:** Implement the plan step by step. If you need to stop, show the user the steps you made to keep them in the loop.
 9. **Post-Implementation Verification:** Do another check to ensure everything implemented is aligned with the implementation roadmap and SRS/SDD, verifying no scope drift occurred during implementation.
-10. **Documentation Update:** Update the corresponding tasks in the implementation plan/roadmap, and create/update a `walkthrough.md` artifact to document what was done.
-11. **Knowledge Synchronization:** Extract all lessons learned (e.g., architectural changes, design patterns, new hardware rules, defect mitigations) from the current session and actively update all relevant institutional knowledge files (`.agent/rules.md`, `docs/design/SDD_Service_Request_Router_Agent_v1_2.md`, `docs/requirements/SRS_Service_Request_Router_Agent_v4_3.md.md`, `docs/Implementation_Roadmap.md`, etc.). Ensure future agents will be strictly aligned with the latest architecture.
-12. **Commit:** Only after the user approval, commit these updates to the feature branch.
-12. **Pull Request:** Open the PR request (or present the changes) for user acceptance.
-13. **Merge:** After user approval, commit and push everything, then merge the branch into the `main` branch.
-14. **Cleanup:** Delete the feature branch that you worked on.
-15. **Return:** Return to the `main` branch.
+10. **Documentation Update:** Update the corresponding tasks in the implementation plan/roadmap, and create a walkthrough file under `docs/walkthroughs/` (e.g., `task-1.2.md`) to document what was done.
+11. **Knowledge Synchronization:** Extract all lessons learned and update relevant institutional knowledge files (`.agent/rules.md`, SDD, SRS, Roadmap). Ensure future agents will be strictly aligned with the latest architecture.
+12. **User Review (CRITICAL):** STOP. Present the implemented code and documentation to the user. You MUST wait for the user to explicitly approve the changes. DO NOT run `git commit` before receiving this approval.
+13. **Commit:** Only AFTER receiving explicit user approval, run `git commit` to save the updates to the feature branch.
+14. **Merge:** Switch to `main` and merge the feature branch into `main`.
+15. **Cleanup:** Delete the feature branch that you worked on.
 16. **Close:** Close the task and inform the user.

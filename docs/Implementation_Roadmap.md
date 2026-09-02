@@ -13,7 +13,7 @@ Each task below is designed to be executed as a single, atomic development unit 
     *   Set up Python environment (using `uv` or `requirements.txt` for Python 3.11+).
     *   Create directory structure (`src/`, `src/llm/`, `src/nodes/`, `eval/`, `data/`).
     *   Implement `.env` loading and configure constants (e.g., `LLM_PROVIDER`, API keys).
-*   [ ] **Task 1.2: Implement Pydantic Data Models (`src/models.py`)**
+*   [x] **Task 1.2: Implement Pydantic Data Models (`src/models.py`)**
     *   Implement `SafetyRiskAssessment` (enforcing life-safety booleans).
     *   Implement `ExtractedEntities` (trade, symptom, stated urgency vs real urgency).
     *   Implement `ClarificationQuestion` and `ServiceRouterDecision`.

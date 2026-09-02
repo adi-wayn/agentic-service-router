@@ -16,3 +16,10 @@
 
 ## 4. Documentation Maintenance
 *   **Single Source of Truth:** The SDD and SRS are living documents. If you hit a technical limitation that requires an architectural shift, you must update the SDD *first* before changing the code.
+
+## 5. Mandatory User Review
+*   **NEVER COMMIT UNAPPROVED CODE:** You must never run `git commit` without explicitly waiting for and receiving user approval on the implemented code. Implement the task, pause, ask for review, and only commit after the user says "Approved".
+
+## 6. Proper Tool Usage
+*   **NO BASH HACKS:** Do not use bash commands like `cat << 'EOF'` or create temporary Python scripts (`fix.py`, `patch.py`, `new_skill.py`) to create or edit files. 
+*   **USE NATIVE TOOLS:** You must exclusively use your native `write_to_file` and `replace_file_content` tools for all file manipulation. No unnecessary files should ever be left in the repository.
