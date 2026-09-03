@@ -72,6 +72,10 @@ class ClarificationState(BaseModel):
     clarification_history: List[Dict[str, str]] = Field(default_factory=list, description="History of Q&A during clarification loops")
     loop_count: int = Field(default=0, description="Number of clarification loops completed")
 
+class FinalizerSynthesis(BaseModel):
+    decision_rationale: str = Field(..., description="Concise human-readable rationale")
+    what_would_change_this_call: str = Field(..., description="Counterfactual condition that would flip this call")
+
 class ServiceRouterDecision(BaseModel):
     request_id: str
     
@@ -83,8 +87,7 @@ class ServiceRouterDecision(BaseModel):
     clarification_state: Optional[ClarificationState] = None
     
     # Node 6 Finalizer Synthesis
-    decision_rationale: str = Field(..., description="Concise human-readable rationale")
-    what_would_change_this_call: str = Field(..., description="Counterfactual condition that would flip this call")
+    finalizer_synthesis: FinalizerSynthesis
     audit_trace: List[str] = Field(default_factory=list, description="Sequential audit ledger of reasoning steps")
 
 class ClarificationLLMOutput(BaseModel):

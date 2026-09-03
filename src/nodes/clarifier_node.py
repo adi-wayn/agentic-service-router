@@ -1,7 +1,7 @@
 from src.state import TriageState
 from src.models import ClarificationState, ClarificationLLMOutput
 from src.llm.factory import LLMClientFactory
-from src.prompts.clarifier_prompt import CLARIFIER_SYSTEM_PROMPT
+from src.prompts.clarifier_prompt import CLARIFIER_SYSTEM_PROMPT, build_clarifier_user_prompt
 from src.prompts.simulated_answers import get_simulated_answer
 
 def clarifier_node(state: TriageState) -> TriageState:
@@ -27,16 +27,12 @@ def clarifier_node(state: TriageState) -> TriageState:
     missing_fields = gap_result.missing_required_fields if gap_result else []
     conflicts = gap_result.detected_conflicts if gap_result else []
     
-    prompt = f"Original Request: {raw_text}\n"
-    if missing_fields:
-        prompt += f"Missing Required Fields: {missing_fields}\n"
-    if conflicts:
-        prompt += f"Detected Conflicts: {conflicts}\n"
-        
-    if clarification_state.clarification_history:
-        prompt += f"Prior Q&A History: {clarification_state.clarification_history}\n"
-        
-    prompt += "Generate up to 3 questions to resolve the gaps/conflicts."
+    prompt = build_clarifier_user_prompt(
+        raw_text, 
+        missing_fields, 
+        conflicts, 
+        clarification_state.clarification_history
+    )
     
     client = LLMClientFactory.get_client()
     try:
