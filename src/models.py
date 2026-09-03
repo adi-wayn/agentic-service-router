@@ -86,3 +86,10 @@ class ServiceRouterDecision(BaseModel):
     decision_rationale: str = Field(..., description="Concise human-readable rationale")
     what_would_change_this_call: str = Field(..., description="Counterfactual condition that would flip this call")
     audit_trace: List[str] = Field(default_factory=list, description="Sequential audit ledger of reasoning steps")
+
+class ClarificationLLMOutput(BaseModel):
+    questions: List[ClarificationQuestion] = Field(
+        ..., 
+        max_items=3, 
+        description="List of 1 to 3 targeted clarification questions addressing missing fields or conflicts"
+    )

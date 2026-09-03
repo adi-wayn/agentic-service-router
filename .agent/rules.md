@@ -9,6 +9,8 @@
 *   **No Mocks:** The `service_catalogue.json` must be dynamically loaded and queried via standard Python, not faked or hardcoded inside the nodes.
 *   **Pydantic Enforcement:** All LLM outputs must be coerced via `with_structured_output` using strict Pydantic schemas (e.g., `ServiceRouterDecision`, `ExtractedEntities`).
     *   *Strict Schema Adherence:* Do not hallucinate or access dynamic properties (like `dynamic_intake_fields`) on Pydantic models. Only use fields explicitly defined in `src/models.py`.
+    *   *Centralized Schemas:* ALL model schemas must reside exclusively in `src/models.py` to maintain a decoupled system. Do not declare ad-hoc or temporary Pydantic models inside node or logic files.
+*   **Centralized Prompts:** ALL system prompts and prompt templates must reside in dedicated files within the `src/prompts/` directory.
 *   **Temperature:** All cognitive node LLM calls must be executed at `Temperature = 0.0` to maximize determinism.
 
 ## 3. Workflow

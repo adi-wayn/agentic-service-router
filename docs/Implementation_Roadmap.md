@@ -47,7 +47,7 @@ Each task below is designed to be executed as a single, atomic development unit 
 ## Phase 3: Agentic Loop & Graph Orchestration (Hours 8 – 13)
 *Objective: Enable closed-loop clarification and wire the state machine together.*
 
-*   [ ] **Task 3.1: Node 5 - Clarifier & Feedback Nodes (`src/nodes/clarifier_node.py`)**
+*   [x] **Task 3.1: Node 5 - Clarifier & Feedback Nodes (`src/nodes/clarifier_node.py`)**
     *   Implement `clarifier_node` to generate 1-3 targeted questions via LLM text generation if state is `NEEDS_CLARIFICATION`.
     *   Implement `feedback_node` to ingest user answers, update `clarification_history`, and increment `loop_count`.
 *   [ ] **Task 3.2: Node 6 - Finalize Decision Node (`src/nodes/finalizer_node.py`)**

@@ -423,7 +423,15 @@ class ServiceRouterDecision(BaseModel):
     decision_rationale: str = Field(..., description="Concise human-readable rationale")
     what_would_change_this_call: str = Field(..., description="Counterfactual condition that would flip this call")
     audit_trace: List[str] = Field(default_factory=list, description="Sequential audit ledger of reasoning steps")
+
+class ClarificationLLMOutput(BaseModel):
+    questions: List[ClarificationQuestion] = Field(
+        ..., 
+        max_items=3, 
+        description="List of 1 to 3 targeted clarification questions addressing missing fields or conflicts"
+    )
 ```
+
 
 
 ---
@@ -963,6 +971,21 @@ Respond strictly according to the ExtractedEntities JSON schema.
 """
 ```
 
+### 8.2 Clarifier System Prompt (`src/prompts/clarifier_prompt.py`)
+
+```python
+CLARIFIER_SYSTEM_PROMPT = """
+You are an expert dispatch triage agent. The inbound service request is missing critical information or has conflicts.
+Your task is to formulate 1 to 3 targeted, courteous, and highly specific questions to ask the customer.
+These questions must directly address the 'missing_required_fields' or 'detected_conflicts' provided in the context.
+Do not ask for information that the customer has already provided. Review the clarification history to avoid repeating questions.
+Output ONLY the requested JSON schema.
+"""
+```
+
+### 8.3 Simulated Answers Context (`src/prompts/simulated_answers.py`)
+
+A static mock database of scenario-specific customer answers designed to simulate user feedback during automated testing and the clarification loop. Provides deterministic edge-case answers (e.g., REQ-002, REQ-004).
 
 ---
 
@@ -1063,6 +1086,8 @@ fs_router_agent/
 │       ├── matcher_prompt.py           # System prompt for semantic catalogue matching
 
 │       ├── clarifier_prompt.py         # Prompt for targeted question formulation
+
+│       ├── simulated_answers.py        # Mock database of customer feedback
 
 │       └── finalizer_prompt.py         # Prompt for rationale explanation
 
