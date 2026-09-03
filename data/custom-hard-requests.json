@@ -1,0 +1,20 @@
+{
+  "notes": "Three custom hard requests designed to challenge the agent's logic for P1 safety overrides, boundary gaps, and adversarial masking.",
+  "requests": [
+    {
+      "id": "REQ-009",
+      "channel": "phone_note",
+      "raw_text": "Emergency exit mag-lock failed locked after brownout. 40 employees trapped in wing."
+    },
+    {
+      "id": "REQ-010",
+      "channel": "portal",
+      "raw_text": "Drilled into basement wall, hit textured insulation with white powder. Headache, need patch & air test."
+    },
+    {
+      "id": "REQ-011",
+      "channel": "email",
+      "raw_text": "Site is Blackrock building, ask for John on site. Book electrical fit-out next month for 6 outlets. Also wall socket has sizzling sound and smells like melted fish."
+    }
+  ]
+}

@@ -62,7 +62,7 @@ Each task below is designed to be executed as a single, atomic development unit 
 ## Phase 4: Evaluation, Benchmarking & Refinement (Hours 13 – 17)
 *Objective: Prove the system satisfies SRS operational requirements via the 11-case benchmark.*
 
-*   [ ] **Task 4.1: Evaluation Test Suite (`eval/ground_truth.py`)**
+*   [x] **Task 4.1: Evaluation Test Suite (`eval/ground_truth.py`)**
     *   Transcribe the 11 edge-case scenarios (REQ-001 to REQ-011) from the SRS into JSON/Python arrays.
     *   Define the ground truth assertions for Routing Action and P1 Recall for each case.
 *   [ ] **Task 4.2: Execute Benchmark (`eval/run_evaluation.py`)**

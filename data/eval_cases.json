@@ -1,0 +1,68 @@
+{
+  "REQ-001": {
+    "expected_template": "HVAC_EMERGENCY",
+    "expected_routing_action": "CONFIDENT_RECOMMENDATION",
+    "expected_real_urgency": "P1",
+    "expected_missing_fields": []
+  },
+  "REQ-002": {
+    "expected_template": "PLUMB_STD",
+    "expected_routing_action": "NEEDS_CLARIFICATION",
+    "expected_real_urgency": "P3",
+    "expected_missing_fields": ["site_location"]
+  },
+  "REQ-003": {
+    "expected_template": "ELEC_FAULT",
+    "expected_routing_action": "NEEDS_CLARIFICATION",
+    "expected_real_urgency": "P1",
+    "expected_missing_fields": ["site_location", "on_site_contact"]
+  },
+  "REQ-004": {
+    "expected_template": null,
+    "expected_routing_action": "NEEDS_CLARIFICATION",
+    "expected_real_urgency": "P1",
+    "expected_missing_fields": ["site_location", "primary_trade", "symptom_summary"]
+  },
+  "REQ-005": {
+    "expected_template": "PLUMB_LEAK",
+    "expected_routing_action": "NEEDS_CLARIFICATION",
+    "expected_real_urgency": "P1",
+    "expected_missing_fields": ["site_location", "on_site_contact"]
+  },
+  "REQ-006": {
+    "expected_template": "ELEC_FAULT",
+    "expected_routing_action": "NEEDS_CLARIFICATION",
+    "expected_real_urgency": "P1",
+    "expected_missing_fields": ["on_site_contact"]
+  },
+  "REQ-007": {
+    "expected_template": null,
+    "expected_routing_action": "ROUTE_TO_HUMAN",
+    "expected_real_urgency": "P3",
+    "expected_missing_fields": []
+  },
+  "REQ-008": {
+    "expected_template": "HVAC_MAINT",
+    "expected_routing_action": "NEEDS_CLARIFICATION",
+    "expected_real_urgency": "P3",
+    "expected_missing_fields": ["preferred_dates"]
+  },
+  "REQ-009": {
+    "expected_template": "LOCK_ACCESS",
+    "expected_routing_action": "NEEDS_CLARIFICATION",
+    "expected_real_urgency": "P1",
+    "expected_missing_fields": ["site_location", "on_site_contact"]
+  },
+  "REQ-010": {
+    "expected_template": null,
+    "expected_routing_action": "ROUTE_TO_HUMAN",
+    "expected_real_urgency": "P1",
+    "expected_missing_fields": []
+  },
+  "REQ-011": {
+    "expected_template": "ELEC_FAULT",
+    "expected_routing_action": "CONFIDENT_RECOMMENDATION",
+    "expected_real_urgency": "P1",
+    "expected_missing_fields": []
+  }
+}
