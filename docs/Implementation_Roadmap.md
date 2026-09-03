@@ -65,7 +65,7 @@ Each task below is designed to be executed as a single, atomic development unit 
 *   [x] **Task 4.1: Evaluation Test Suite (`eval/ground_truth.py`)**
     *   Transcribe the 11 edge-case scenarios (REQ-001 to REQ-011) from the SRS into JSON/Python arrays.
     *   Define the ground truth assertions for Routing Action and P1 Recall for each case.
-*   [ ] **Task 4.2: Execute Benchmark (`eval/run_evaluation.py`)**
+*   [x] **Task 4.2: Execute Benchmark (`eval/run_evaluation.py`)**
     *   Implement an asynchronous evaluation script to run all 11 cases through the compiled LangGraph.
     *   Automatically compute $Acc_{\text{action}}$, $Rec_{P1}$, $F1_{\text{macro}}$, and Brier Score / ECE.
 *   [ ] **Task 4.3: Metric Alignment & Adjustments**

@@ -9,7 +9,7 @@ class BaseLLMClient(ABC):
     def generate_structured(
         self, 
         prompt: str, 
-        response_schema: Type[T], 
+        schema: Type[T], 
         system_instruction: Optional[str] = None
     ) -> T:
         """Generates a structured Pydantic model response."""

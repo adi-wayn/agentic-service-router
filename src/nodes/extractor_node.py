@@ -29,7 +29,7 @@ def extract_and_analyze_node(state: TriageState) -> TriageState:
         extracted_entities_obj: ExtractedEntities = client.generate_structured(
             prompt=user_prompt,
             schema=ExtractedEntities,
-            system_prompt=EXTRACTOR_SYSTEM_PROMPT
+            system_instruction=EXTRACTOR_SYSTEM_PROMPT
         )
         
         # Populate the state with the Pydantic model directly

@@ -7,7 +7,7 @@ from src.llm.base import BaseLLMClient, T
 from src.config import config
 
 class GeminiLLMAdapter(BaseLLMClient):
-    def __init__(self, model_name: str = "gemini-2.5-flash"):
+    def __init__(self, model_name: str = "gemini-3.5-flash-lite"):
         api_key = config.GEMINI_API_KEY
         if not api_key:
             raise ValueError("GEMINI_API_KEY environment variable is missing.")
@@ -19,14 +19,14 @@ class GeminiLLMAdapter(BaseLLMClient):
     def generate_structured(
         self, 
         prompt: str, 
-        response_schema: Type[T], 
+        schema: Type[T], 
         system_instruction: Optional[str] = None
     ) -> T:
         gen_config = types.GenerateContentConfig(
             temperature=0.0,
             system_instruction=system_instruction,
             response_mime_type="application/json",
-            response_schema=response_schema
+            response_schema=schema
         )
         response = self.client.models.generate_content(
             model=self.model_name,
