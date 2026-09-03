@@ -1099,7 +1099,7 @@ fs_router_agent/
 │
 ├── requirements.txt                    # Python package dependencies (including rich)
 ├── README.md                           # Setup, run instructions, architecture summary
-└── WRITEUP.md                          # 3-Page formal assignment submission report
+└── docs/presentation/index.html        # Interactive Web Presentation & Technical White Paper
 ```
 
 ### 10.2 Interactive CLI & Batch Dynamic Evaluation Architecture
@@ -1120,7 +1120,7 @@ To satisfy operational requirements for dispatcher interaction and live runtime 
 | **Phase 2: Core Triage** | Hours 3 – 8 | `extractor_node.py`, `matcher_node.py`, `gap_node.py`, `router_node.py` | Single-pass extraction, template matching, margin detector, and confidence formula running. |
 | **Phase 3: Agentic Loop** | Hours 8 – 13 | `clarifier_node.py`, `graph.py`, `agent.py` | Full LangGraph compiled; multi-turn clarification loop converging $\le 2$ turns. |
 | **Phase 4: Benchmarking & Eval** | Hours 13 – 17 | `eval/ground_truth.py`, `eval/run_evaluation.py` | 11 cases executed; empirical error analysis documented; metrics target verified. |
-| **Phase 5: Write-Up & Proof** | Hours 17 – 21 | `WRITEUP.md`, `README.md`, logs | 3-page write-up covering architecture, trade-offs, MCP analysis, and eval proof. |
+| **Phase 5: Presentation & Proof** | Hours 17 – 21 | `docs/presentation/`, `README.md`, logs | Interactive web presentation & technical white paper covering architecture, trade-offs, MCP analysis, and eval proof. |
 | **Phase 6: Packaging & QA** | Hours 21 – 24 | Final repository test & zip archive | Clean fresh-environment run passes with 1 command (`python -m eval.run_evaluation`). |
 
 

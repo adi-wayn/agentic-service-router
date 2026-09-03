@@ -4,6 +4,30 @@
 [![LangGraph](https://img.shields.io/badge/Orchestration-LangGraph-orange.svg)](https://github.com/langchain-ai/langgraph)
 [![Pydantic v2](https://img.shields.io/badge/Validation-Pydantic%20v2-green.svg)](https://docs.pydantic.dev/)
 [![Assessment](https://img.shields.io/badge/Type-Candidate%20Technical%20Assessment-blueviolet.svg)]()
+[![Interactive Presentation](https://img.shields.io/badge/Interactive%20Presentation-docs%2Fpresentation-brightgreen.svg?style=for-the-badge&logo=html5)](docs/presentation/index.html)
+
+> ### 🌟 **PRIMARY DELIVERABLE: Interactive Presentation & Technical White Paper**
+>
+> **If you are reviewing this assessment, START HERE before reading the rest of this repository.**
+> 
+> Instead of a static PDF or markdown writeup, our primary deliverable is a self-contained, interactive web presentation and technical white paper located at [`docs/presentation/index.html`](docs/presentation/index.html). It matches the visual identity of our Rich TUI and includes live interactive state diagrams, 3x3 confusion matrix inspectors, JSON telemetry diffs, and deep architectural rationales.
+>
+> 🚀 **How to Open (Zero-Config, Standalone, Works Offline):**
+> ```bash
+> # In macOS / Linux terminal:
+> open docs/presentation/index.html
+> # or in Windows:
+> start docs/presentation/index.html
+> ```
+> 👉 **[Click here to view `docs/presentation/index.html`](docs/presentation/index.html)** *(Zero installation, zero npm dependencies, self-contained HTML/CSS/JS)*
+>
+> ---
+> **What You Will Find Inside the Interactive White Paper:**
+> - **Dual Presentation Views:** Toggle between **Executive Pitch Deck** (high-level KPIs) and **Deep Technical White Paper** (exhaustive engineering specs).
+> - **Interactive 6-Node LangGraph State Machine:** Embedded Mermaid diagram with collapsible node contracts & framework trade-offs.
+> - **The Empirical Evolution (v1 vs v2):** How Macro F1 surged from **0.103 to 0.908 (+781% gain)** with side-by-side payload JSON diffs.
+> - **Human Steering & AI Dynamics:** How the human architect directed development under IEEE 830, overrode AI suggestions 6 times, and compressed **1+ weeks of work into 2 days**.
+> - **Interactive 3x3 Confusion Matrix & Telemetry:** Hover to inspect individual test cases, view mathematical definitions (Macro F1, Safety Penalty, ECE), and browse real telemetry logs.
 
 The **Field Services Intelligent Dispatcher (FS-ID)** is an autonomous agentic routing engine designed for operational dispatch desks. It ingests unstructured, ambiguous, and emotionally charged customer maintenance requests, identifies critical safety hazards, extracts physical entities, maps symptoms against a dynamic service catalogue, and issues deterministic dispatch routing actions accompanied by confidence scores and causal rationales.
 
@@ -11,6 +35,7 @@ The **Field Services Intelligent Dispatcher (FS-ID)** is an autonomous agentic r
 
 ## Table of Contents
 
+- [🌟 PRIMARY DELIVERABLE: Interactive Presentation & White Paper](#-primary-deliverable-interactive-presentation--technical-white-paper)
 - [System Architecture](#system-architecture)
 - [Project Directory Structure](#project-directory-structure)
 - [Prerequisites & Environment Setup](#prerequisites--environment-setup)
@@ -108,6 +133,10 @@ agentic-service-router/
 │   └── run_evaluation.py                 # Offline 11-case benchmark runner
 │
 ├── docs/                                 # Architectural specifications & reports
+│   ├── presentation/                     # 🌟 Interactive Presentation & Technical White Paper
+│   │   ├── index.html                    # Self-contained presentation entry point
+│   │   ├── style.css                     # Dark-mode Rich TUI visual design tokens
+│   │   └── app.js                        # Interactive confusion matrix, tabs, diff switcher
 │   ├── requirements/                     # SRS v4.3
 │   ├── design/                           # SDD v1.2
 │   ├── reports/                          # Benchmark Evaluation Reports (v1, v2)
@@ -335,6 +364,7 @@ The evaluation suite implements strict quantitative KPIs grounded in data scienc
 
 ## Documentation & Artifacts
 
+- 🌟 **[Interactive Web Presentation & Technical White Paper (docs/presentation/index.html)](docs/presentation/index.html)** — **Primary Showcase Deliverable**
 - [Software Requirements Specification (SRS v4.3)](docs/requirements/SRS_Service_Request_Router_Agent_v4_3.md)
 - [Software Design Document (SDD v1.2)](docs/design/SDD_Service_Request_Router_Agent_v1_2.md)
 - [Implementation Roadmap](docs/Implementation_Roadmap.md)
