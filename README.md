@@ -3,7 +3,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![LangGraph](https://img.shields.io/badge/Orchestration-LangGraph-orange.svg)](https://github.com/langchain-ai/langgraph)
 [![Pydantic v2](https://img.shields.io/badge/Validation-Pydantic%20v2-green.svg)](https://docs.pydantic.dev/)
-[![License](https://img.shields.io/badge/License-Academic%20Project-lightgrey.svg)]()
+[![Assessment](https://img.shields.io/badge/Type-Candidate%20Technical%20Assessment-blueviolet.svg)]()
 
 The **Field Services Intelligent Dispatcher (FS-ID)** is an autonomous agentic routing engine designed for operational dispatch desks. It ingests unstructured, ambiguous, and emotionally charged customer maintenance requests, identifies critical safety hazards, extracts physical entities, maps symptoms against a dynamic service catalogue, and issues deterministic dispatch routing actions accompanied by confidence scores and causal rationales.
 
@@ -338,5 +338,5 @@ The evaluation suite implements strict quantitative KPIs grounded in data scienc
 - [Software Requirements Specification (SRS v4.3)](docs/requirements/SRS_Service_Request_Router_Agent_v4_3.md)
 - [Software Design Document (SDD v1.2)](docs/design/SDD_Service_Request_Router_Agent_v1_2.md)
 - [Implementation Roadmap](docs/Implementation_Roadmap.md)
+- [Benchmark Evaluation Report (v1.0)](docs/reports/benchmark_report_v1.md)
 - [Benchmark Evaluation Report (v2.0)](docs/reports/benchmark_report_v2.md)
-- [Task 5.1 Walkthrough: CLI & Interactive Evaluation](docs/walkthroughs/task-5.1.md)
