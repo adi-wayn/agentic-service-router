@@ -693,59 +693,34 @@ def route_conditional_edge(state: TriageState) -> str:
         return "finalize_node"
 
 def create_triage_graph() -> StateGraph:
-
     workflow = StateGraph(TriageState)
-
     
-
     # Register Nodes
-
     workflow.add_node("extractor_node", extract_and_analyze_node)
-
     workflow.add_node("matcher_node", catalogue_match_node)
-
-    workflow.add_node("router_node", confidence_and_route_node)
-
+    workflow.add_node("gap_node", gap_and_conflict_node)
+    workflow.add_node("router_node", confidence_and_routing_node)
     workflow.add_node("clarifier_node", clarifier_node)
-
-    workflow.add_node("feedback_node", feedback_ingestion_node)
-
+    workflow.add_node("feedback_node", feedback_node)
     workflow.add_node("finalize_node", finalize_decision_node)
-
     
-
     # Set Graph Edges
-
     workflow.set_entry_point("extractor_node")
-
     workflow.add_edge("extractor_node", "matcher_node")
-
-    workflow.add_edge("matcher_node", "router_node")
-
+    workflow.add_edge("matcher_node", "gap_node")
+    workflow.add_edge("gap_node", "router_node")
     
-
     workflow.add_conditional_edges(
-
         "router_node",
-
         route_conditional_edge,
-
         {
-
             "finalize_node": "finalize_node",
-
             "clarifier_node": "clarifier_node"
-
         }
-
     )
-
     
-
     workflow.add_edge("clarifier_node", "feedback_node")
-
     workflow.add_edge("feedback_node", "extractor_node")
-
     workflow.add_edge("finalize_node", END)
 
     

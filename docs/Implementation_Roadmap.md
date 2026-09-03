@@ -53,7 +53,7 @@ Each task below is designed to be executed as a single, atomic development unit 
 *   [x] **Task 3.2: Node 6 - Finalize Decision Node (`src/nodes/finalizer_node.py`)**
     *   Synthesize the 4-part concise rationale (Selected template, Causal justification, Missing intake, Counterfactual boundary condition).
     *   Format and output the finalized `ServiceRouterDecision`.
-*   [ ] **Task 3.3: LangGraph Compilation (`src/graph.py` & `src/agent.py`)**
+*   [x] **Task 3.3: LangGraph Compilation (`src/graph.py` & `src/agent.py`)**
     *   Initialize `StateGraph(TriageState)`.
     *   Add nodes and configure transitions (`extractor -> matcher -> gap -> router`).
     *   Implement `route_conditional_edge` for loop recursion bounded at $K \le 2$ turns.
