@@ -49,3 +49,5 @@ logs/
 # Project specific
 tmp/
 .pytest_cache/
+data/session_report_*.json
+data/session_batch_*.json

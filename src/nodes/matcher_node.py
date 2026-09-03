@@ -1,5 +1,5 @@
 from typing import List, Dict, Any
-from src.state import TriageState
+from src.core.state import TriageState
 from src.models import CatalogueMatchResult
 from src.llm.factory import LLMClientFactory
 from src.prompts.matcher_prompt import MATCHER_SYSTEM_PROMPT, build_matcher_user_prompt

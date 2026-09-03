@@ -1,5 +1,5 @@
 import json
-from src.state import TriageState
+from src.core.state import TriageState
 from src.models import FinalizerSynthesis, ServiceRouterDecision
 from src.llm.factory import LLMClientFactory
 from src.prompts.finalizer_prompt import FINALIZER_SYSTEM_PROMPT, build_finalizer_user_prompt

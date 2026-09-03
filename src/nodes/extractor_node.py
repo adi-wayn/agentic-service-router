@@ -1,5 +1,5 @@
 from typing import Any, Dict
-from src.state import TriageState
+from src.core.state import TriageState
 from src.models import ExtractedEntities
 from src.llm.factory import LLMClientFactory
 from src.prompts.extractor_prompt import EXTRACTOR_SYSTEM_PROMPT, build_extractor_user_prompt

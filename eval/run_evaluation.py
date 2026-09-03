@@ -11,7 +11,7 @@ try:
 except ImportError:
     pass
 
-from src.agent import TriageAgent
+from src.core.agent import TriageAgent
 from eval.ground_truth import load_ground_truth
 from eval.metrics import (
     compute_confusion_matrix,

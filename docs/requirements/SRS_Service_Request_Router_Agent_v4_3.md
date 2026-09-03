@@ -275,8 +275,15 @@ $$\text{Confidence } C = (W_{\text{signal}} \cdot S_{\text{signal}}) + (W_{\text
 ### FR-10: Multi-Provider LLM Abstraction & Interoperability
 
 * **FR-10.1:** The system shall implement an abstract, provider-agnostic LLM interface (Adapter Pattern) decoupling high-level agentic triage logic from specific model vendor SDKs.  
-* **FR-10.2:** The system shall support Google Gemini (e.g., `gemini-1.5-pro` / `gemini-2.0-flash`) as the default / primary provider, while maintaining plug-and-play compatibility with Anthropic (`claude-3-5-sonnet`) and OpenAI (`gpt-4o`).  
+* **FR-10.2:** The system shall maintain plug-and-play compatibility across Google Gemini, Anthropic Claude, and OpenAI GPT with zero hardcoded vendor bias.  
 * **FR-10.3:** Switching between LLM providers shall be achievable entirely via configuration parameters or environment variables (`LLM_PROVIDER=gemini|anthropic|openai`) without modifying any prompt, state machine, or evaluation code.
+
+### FR-11: Interactive Command-Line Interface (CLI) & Dynamic Evaluation Tracking
+
+* **FR-11.1:** The system shall provide an interactive terminal user interface (TUI) located at `src/main.py` allowing human dispatchers to submit requests, inspect live reasoning, and view visual confidence bars, extracted entities, causal rationales, and audit traces using rich formatting.
+* **FR-11.2:** The interactive interface shall provide operational utility slash commands including `/eval` (evaluation toggle), `/metrics` (live benchmark report), `/history` (case history log), `/report` (export report to JSON), `/catalogue` (view service catalogue), `/help` (command documentation), and `quit`/`exit`.
+* **FR-11.3:** The system shall support an opt-in live evaluation mode (`/eval`) where human dispatchers can review each triage prediction, verify accuracy (`[y/n/skip]`), and record ground truth corrections for templates, routing actions, urgency tiers, and missing intake fields.
+* **FR-11.4:** The live evaluation engine shall accumulate ground truth dynamically and compute the complete Data Science evaluation metrics suite (Confusion Matrix, Macro/Weighted F1, P1 Safety Recall, Template Accuracy, Mean Jaccard IoU, Brier Score, ECE, and Clarification Quality) in configurable batches of 3 evaluated cases, automatically persisting batch reports to `data/session_batch_<num>_<timestamp>.json`.
 
 ---
 

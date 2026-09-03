@@ -1,4 +1,4 @@
-from src.state import TriageState
+from src.core.state import TriageState
 from src.models import ClarificationState, ClarificationLLMOutput
 from src.llm.factory import LLMClientFactory
 from src.prompts.clarifier_prompt import CLARIFIER_SYSTEM_PROMPT, build_clarifier_user_prompt

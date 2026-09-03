@@ -9,8 +9,8 @@ class LLMClientFactory:
         provider = config.LLM_PROVIDER
         
         if provider == "gemini":
-            # Using gemini-3.5-flash-lite for higher free tier quotas
-            model_name = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite")
+            # Default to gemini-3.1-flash-lite with automated fallback across available flash models
+            model_name = os.environ.get("GEMINI_MODEL", "gemini-3.1-flash-lite")
             return GeminiLLMAdapter(model_name=model_name)
         elif provider == "anthropic":
             raise NotImplementedError("Anthropic adapter is not yet implemented.")

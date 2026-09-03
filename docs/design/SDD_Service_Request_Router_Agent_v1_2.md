@@ -647,12 +647,12 @@ def calculate_calibrated_confidence(
 
 ## 6. LangGraph State Machine & Agentic Loop Implementation
 
-### 6.1 StateGraph Construction (`src/graph.py`)
+### 6.1 StateGraph Construction (`src/core/graph.py`)
 
 ```python
 from langgraph.graph import StateGraph, END
 
-from src.state import TriageState
+from src.core.state import TriageState
 
 from src.nodes.extractor_node import extract_and_analyze_node
 
@@ -1044,93 +1044,75 @@ Following the completion of iterative refactoring on the agent logic (Task 4.3),
 
 ```text
 fs_router_agent/
-
 │
-
 ├── data/
-
-│   ├── service_catalogue.json          # Starter service catalogue
-
-│   ├── test_requests.json              # 8 starter seed requests
-
-│   └── custom_hard_requests.json       # 3 custom edge-case requests (REQ-009 to REQ-011)
-
+│   ├── service_catalogue.json          # Starter service catalogue (READ-ONLY)
+│   ├── test_requests.json              # 8 starter seed requests (READ-ONLY)
+│   ├── custom-hard-requests.json       # 3 custom edge-case requests (REQ-009 to REQ-011)
+│   ├── eval_cases.json                 # Ground truth assertions (REQ-001 to REQ-011)
+│   └── evaluation_results.json         # Benchmark execution log
 │
-
 ├── src/
-
 │   ├── __init__.py
-
-│   ├── models.py                       # Pydantic v2 data contracts
-
+│   ├── main.py                         # Interactive CLI / TUI entry point
+│   ├── models.py                       # Centralized Pydantic v2 data contracts
 │   ├── catalogue.py                    # Dynamic catalogue loader & schema validator
-
-│   ├── state.py                        # LangGraph TypedDict state
-
-│   ├── graph.py                        # StateGraph builder and compiler (6 SRP nodes)
-
-│   ├── agent.py                        # Main CLI and programmatic entry point
-
-│   ├── llm/
-
+│   ├── config.py                       # Centralized environment configuration
+│   │
+│   ├── core/                           # LangGraph State Machine & Agent Orchestration
+│   │   ├── __init__.py
+│   │   ├── state.py                    # LangGraph TypedDict state (TriageState)
+│   │   ├── graph.py                    # StateGraph builder and compiler (6 SRP nodes)
+│   │   └── agent.py                    # TriageAgent programmatic interface & Mermaid export
+│   │
+│   ├── cli/                            # Interactive Terminal UI & Dynamic Evaluation
+│   │   ├── __init__.py
+│   │   ├── cli.py                      # Rich formatting, panels, tables, prompts, status
+│   │   └── session_tracker.py          # Dynamic Data Science metrics engine & batch tracker
+│   │
+│   ├── llm/                            # Abstract Multi-Provider LLM Layer
 │   │   ├── base.py                     # Abstract BaseLLMClient interface
-
 │   │   ├── factory.py                  # LLMClientFactory (Gemini, Anthropic, OpenAI)
-
 │   │   ├── gemini_adapter.py           # Google Gemini adapter
-
 │   │   ├── anthropic_adapter.py        # Anthropic Claude adapter
-
 │   │   └── openai_adapter.py           # OpenAI GPT adapter
-
-│   ├── nodes/
-
+│   │
+│   ├── nodes/                          # 6 LangGraph Cognitive & Algorithmic Nodes
 │   │   ├── extractor_node.py           # Node 1: Entity extraction & hazard assessment
-
 │   │   ├── matcher_node.py             # Node 2: Dynamic catalogue matching
-
 │   │   ├── gap_node.py                 # Node 3: Missing fields & cross-trade margin check
-
 │   │   ├── router_node.py              # Node 4: Confidence scoring & action thresholds
-
 │   │   ├── clarifier_node.py           # Node 5: Clarification generation & feedback ingestion
-
 │   │   └── finalizer_node.py           # Node 6: Output formatting & audit log assembly
-
-│   └── prompts/
-
+│   │
+│   └── prompts/                        # Centralized LLM Prompt Templates
 │       ├── extractor_prompt.py         # System prompt for extraction
-
 │       ├── matcher_prompt.py           # System prompt for semantic catalogue matching
-
 │       ├── clarifier_prompt.py         # Prompt for targeted question formulation
-
 │       ├── simulated_answers.py        # Mock database of customer feedback
-
 │       └── finalizer_prompt.py         # Prompt for rationale explanation
-
 │
-
 ├── eval/
-
 │   ├── ground_truth.py                 # Ground truth annotations for 11 cases
-
 │   ├── metrics.py                      # Confusion matrix, Precision, Recall, F1, ECE
-
 │   └── run_evaluation.py               # Benchmark runner (evaluates current system metrics)
-
 │
-
-├── .env.example                        # Environment template (GEMINI_API_KEY, etc.)
-
-├── requirements.txt                    # Python package dependencies
-
+├── requirements.txt                    # Python package dependencies (including rich)
 ├── README.md                           # Setup, run instructions, architecture summary
-
 └── WRITEUP.md                          # 3-Page formal assignment submission report
 ```
 
-### 10.2 24-Hour Sprint Milestones
+### 10.2 Interactive CLI & Batch Dynamic Evaluation Architecture
+
+To satisfy operational requirements for dispatcher interaction and live runtime quality assurance:
+1. **Rich Presentation Layer (`src/cli/cli.py`)**: Implements stylized terminal output via the `rich` library. Outputs the 6-node triage decision card with color-coded routing actions, visual block confidence bars, extracted physical entities, causal rationales, counterfactuals, and complete node audit traces.
+2. **Dynamic In-Session Evaluation Engine (`src/cli/session_tracker.py`)**:
+   - Collects user ground truth feedback (`[y/n/skip]`) in real-time during interactive sessions.
+   - Computes the identical Data Science metric suite defined in `eval/metrics.py` (Confusion Matrix, Macro/Weighted F1, P1 Safety Recall, Template Accuracy, Mean Jaccard IoU, Brier Score, ECE, Clarification Specificity/Redundancy).
+   - Operates in **batches of 3 evaluated cases** (`batch_size=3`) to ensure statistical relevance without adding per-request rendering overhead.
+   - Automatically writes serialized batch reports to `data/session_batch_<num>_<timestamp>.json`.
+
+### 10.3 24-Hour Sprint Milestones
 
 | Sprint Phase | Time Window | Primary Deliverables | Acceptance Criteria |
 | :---- | :---- | :---- | :---- |

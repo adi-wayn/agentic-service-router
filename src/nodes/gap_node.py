@@ -1,5 +1,5 @@
 from typing import List, Dict, Any, Optional
-from src.state import TriageState
+from src.core.state import TriageState
 from src.models import GapAndConflictResult
 from src.catalogue import ServiceCatalogue
 

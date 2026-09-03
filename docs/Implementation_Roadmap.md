@@ -75,8 +75,11 @@ Each task below is designed to be executed as a single, atomic development unit 
 ## Phase 5: Delivery & Polish (Hours 17 – 24)
 *Objective: Finalise the deliverables for presentation and integration.*
 
-*   [ ] **Task 5.1: Command-Line Interface (CLI)**
-    *   Create a clean entry point (`main.py`) allowing a user to run the agent interactively in the terminal.
+*   [x] **Task 5.1: Command-Line Interface (CLI) & Rich TUI**
+    *   Created entry point (`src/main.py` with launcher at root `main.py`) with rich terminal styling, spinners, and service catalogue display.
+    *   Built `src/cli.py` for comprehensive formatting of 6-node triage decisions, rationales, and audit traces.
+    *   Implemented `src/session_tracker.py` for live Data Science benchmark evaluation tracking in batches of 3 cases (`/eval`, `/metrics`, `/history`, `/report`).
+    *   Added walkthrough: `docs/walkthroughs/task-5.1.md`.
 *   [ ] **Task 5.2: Final Documentation (`WRITEUP.md`)**
     *   Produce the final architectural summary covering the hybrid approach, the MCP analysis, the evaluation proof, and design trade-offs.
 *   [ ] **Task 5.3: Packaging & QA**

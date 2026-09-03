@@ -1,5 +1,5 @@
 from langgraph.graph import StateGraph, END
-from src.state import TriageState
+from src.core.state import TriageState
 from src.nodes.extractor_node import extract_and_analyze_node
 from src.nodes.matcher_node import catalogue_match_node
 from src.nodes.gap_node import gap_and_conflict_node
