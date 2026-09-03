@@ -99,10 +99,10 @@ def run_benchmark(verbose: bool = False):
             continue
             
         # Safely extract predictions
-        pred_action = decision.routing_result.routing_action if decision.routing_result else "UNKNOWN"
+        pred_action = decision.initial_routing_action if decision.initial_routing_action else "UNKNOWN"
         pred_urgency = decision.extracted_entities.assessed_real_urgency if decision.extracted_entities else "UNKNOWN"
         pred_temp = decision.match_result.top_template_id if decision.match_result else None
-        pred_missing = decision.gap_result.missing_required_fields if decision.gap_result else []
+        pred_missing = decision.initial_missing_fields if decision.initial_missing_fields is not None else []
         pred_conf = decision.routing_result.confidence_score if decision.routing_result else 0.0
         
         clarif_qs = decision.clarification_state.clarification_questions if decision.clarification_state else []

@@ -5,41 +5,32 @@ from src.catalogue import ServiceCatalogue
 
 def calculate_calibrated_confidence(
     signal_score: float,
-    required_fields: List[str],
-    extracted_fields: Dict[str, Any],
     conflicts: List[str],
     is_cross_trade_collision: bool,
-    is_out_of_catalogue: bool
+    is_out_of_catalogue: bool,
+    missing_fields: List[str]
 ) -> float:
     """
-    Calculates the non-linear composite confidence score based on the strict formula
-    defined in the SDD/SRS.
+    Calculates the non-linear composite confidence score based on the strict formula.
     """
     if is_out_of_catalogue:
         return 0.10
     if is_cross_trade_collision:
         return 0.30
         
-    if not required_fields:
-        completeness_ratio = 1.0
-        missing_count = 0
-    else:
-        present_count = sum(1 for f in required_fields if extracted_fields.get(f))
-        missing_count = len(required_fields) - present_count
-        completeness_ratio = present_count / len(required_fields)
-        
-    w_signal = 0.60
-    w_fields = 0.40
-    base_confidence = (w_signal * signal_score) + (w_fields * completeness_ratio)
+    # Base confidence strictly from the Matcher's signal score
+    confidence = signal_score
     
+    # Penalize confidence only for conflicts, not for simply missing fields
     conflict_penalty = min(0.40, len(conflicts) * 0.20)
+    confidence = max(0.0, min(1.0, confidence - conflict_penalty))
     
-    intake_penalty = 0.0
-    if missing_count > 0:
-        intake_penalty += 0.25 * missing_count
+    # If there are missing fields, we enforce that confidence must fall into the Clarification Band [0.45, 0.70]
+    # because missing fields means we confidently know what to ask the user.
+    if missing_fields:
+        confidence = max(0.45, min(0.70, confidence))
         
-    final_score = base_confidence - conflict_penalty - intake_penalty
-    return max(0.0, min(1.0, round(final_score, 2)))
+    return round(confidence, 2)
 
 def confidence_and_routing_node(state: TriageState) -> TriageState:
     """
@@ -57,40 +48,41 @@ def confidence_and_routing_node(state: TriageState) -> TriageState:
         state["audit_trace"].append("Router Node aborted: Missing prerequisite state.")
         return state
 
-    # Extract dynamic payload to check for completeness
-    extracted_dict = extracted.model_dump(exclude_none=True, exclude_unset=True)
-
-    # Retrieve required fields based on the selected template (if any)
-    required_fields = []
-    if match_result.top_template_id:
-        catalogue = ServiceCatalogue()
-        required_fields = catalogue.get_required_fields(match_result.top_template_id)
-        
-    # Calculate non-linear confidence
+    # Calculate calibrated confidence using the helper function
     top_candidate = match_result.candidates[0] if match_result.candidates else None
     signal_score = top_candidate.signal_score if top_candidate else 0.0
     
     confidence = calculate_calibrated_confidence(
         signal_score=signal_score,
-        required_fields=required_fields,
-        extracted_fields=extracted_dict,
         conflicts=gap_result.detected_conflicts,
         is_cross_trade_collision=gap_result.is_cross_trade_collision,
-        is_out_of_catalogue=match_result.is_out_of_catalogue
+        is_out_of_catalogue=match_result.is_out_of_catalogue,
+        missing_fields=gap_result.missing_required_fields
     )
     
-    # Apply Strict Banding Thresholds
+    # Apply Strict Banding Thresholds based on logic rules
     action = "ROUTE_TO_HUMAN"
-    if confidence >= 0.75:
-        action = "CONFIDENT_RECOMMENDATION"
-    elif 0.40 <= confidence < 0.75:
+    
+    if match_result.is_out_of_catalogue or gap_result.is_cross_trade_collision:
+        action = "ROUTE_TO_HUMAN"
+    elif gap_result.missing_required_fields:
         action = "NEEDS_CLARIFICATION"
-        
+    else:
+        if confidence >= 0.75:
+            action = "CONFIDENT_RECOMMENDATION"
+        elif 0.40 <= confidence < 0.75:
+            action = "NEEDS_CLARIFICATION"
+        else:
+            action = "ROUTE_TO_HUMAN"
+            
     routing_result = ConfidenceAndRoutingResult(
         confidence_score=confidence,
         routing_action=action
     )
     
+    if "initial_routing_action" not in state:
+        state["initial_routing_action"] = action
+        
     state["routing_result"] = routing_result
     state["audit_trace"].append(f"Router Node complete: Score={confidence}, Action={action}")
     

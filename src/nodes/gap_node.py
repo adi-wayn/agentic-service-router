@@ -11,7 +11,17 @@ FIELD_MAPPING = {
     "access_window": "access_window_or_availability",
     "on_site_contact": "on_site_contact_info",
     "unit_type": "specific_equipment",
-    "preferred_dates": "access_window_or_availability"
+    "preferred_dates": "access_window_or_availability",
+    "fixture": "specific_equipment",
+    "water_source_if_known": "specific_equipment",
+    "is_water_still_flowing": "symptom_description",
+    "affected_circuits_or_area": "affected_area_or_room",
+    "is_there_a_safety_risk": "safety_assessment",
+    "scope_of_work": "symptom_description",
+    "drawings_or_spec_available": "symptom_description",
+    "door_or_entry_point": "specific_equipment",
+    "is_the_premises_currently_unsecured": "symptom_description",
+    "task_description": "symptom_description"
 }
 
 def gap_and_conflict_node(state: TriageState) -> TriageState:
@@ -60,9 +70,14 @@ def gap_and_conflict_node(state: TriageState) -> TriageState:
             required_fields = catalogue.get_required_fields(match_result.top_template_id)
             
             for req_field in required_fields:
-                # 1. Check if it's a known mapped field in the Pydantic schema
                 model_field = FIELD_MAPPING.get(req_field, req_field)
-                val = getattr(extracted, model_field, None)
+                val = None
+                
+                if model_field == "safety_assessment":
+                    if extracted.safety_assessment:
+                        val = True
+                else:
+                    val = getattr(extracted, model_field, None)
                 
                 # If None, empty string, or empty list
                 if not val:
@@ -79,5 +94,8 @@ def gap_and_conflict_node(state: TriageState) -> TriageState:
         is_cross_trade_collision=is_cross_trade
     )
     
+    if "initial_missing_fields" not in state:
+        state["initial_missing_fields"] = missing_fields.copy()
+        
     state["gap_result"] = gap_result
     return state

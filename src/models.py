@@ -83,7 +83,9 @@ class ServiceRouterDecision(BaseModel):
     extracted_entities: Optional[ExtractedEntities] = None
     match_result: Optional[CatalogueMatchResult] = None
     gap_result: Optional[GapAndConflictResult] = None
+    initial_missing_fields: Optional[List[str]] = None
     routing_result: Optional[ConfidenceAndRoutingResult] = None
+    initial_routing_action: Optional[str] = None
     clarification_state: Optional[ClarificationState] = None
     
     # Node 6 Finalizer Synthesis

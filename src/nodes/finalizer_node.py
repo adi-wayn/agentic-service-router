@@ -37,7 +37,9 @@ def finalize_decision_node(state: TriageState) -> TriageState:
             extracted_entities=state.get("extracted_entities"),
             match_result=state.get("match_result"),
             gap_result=state.get("gap_result"),
+            initial_missing_fields=state.get("initial_missing_fields"),
             routing_result=state.get("routing_result"),
+            initial_routing_action=state.get("initial_routing_action"),
             clarification_state=state.get("clarification_state"),
             finalizer_synthesis=synthesis,
             audit_trace=state["audit_trace"].copy()

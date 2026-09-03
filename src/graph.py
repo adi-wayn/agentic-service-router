@@ -23,7 +23,7 @@ def route_conditional_edge(state: TriageState) -> str:
     elif action == "NEEDS_CLARIFICATION":
         if loop_count >= 2:
             state["audit_trace"].append("Clarification limit reached (2 turns). Escalating to Human.")
-            # Force escalate to human when loops run out
+            # Force escalate to human when loops run out (Production Reality)
             routing_result.routing_action = "ROUTE_TO_HUMAN"
             return "finalize_node"
         return "clarifier_node"

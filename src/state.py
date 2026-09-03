@@ -22,9 +22,11 @@ class TriageState(TypedDict, total=False):
     
     # Node 3: Gaps & Conflict Detection
     gap_result: Optional[GapAndConflictResult]
+    initial_missing_fields: Optional[List[str]]
     
     # Node 4: Confidence & Action Banding
     routing_result: Optional[ConfidenceAndRoutingResult]
+    initial_routing_action: Optional[str]
     
     # Node 5: Clarification Loop Context
     clarification_state: Optional[ClarificationState]

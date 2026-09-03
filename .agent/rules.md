@@ -27,4 +27,5 @@
 *   **NO BASH HACKS:** Do not use bash commands like `cat << 'EOF'` or create temporary Python scripts (`fix.py`, `patch.py`, `new_skill.py`) to create or edit files. 
 *   **USE NATIVE TOOLS:** You must exclusively use your native `write_to_file` and `replace_file_content` tools for all file manipulation. No unnecessary files should ever be left in the repository.
 
-- **SERVICE CATALOGUE IS READ-ONLY**: The `data/service_catalogue.json` file is strictly read-only. It simulates an external database or legacy system and must NEVER be modified to fit the code. Code must adapt to the catalogue, not the other way around.
+- **ASSIGNMENT DATA FILES ARE READ-ONLY**: The files `data/service_catalogue.json` and `data/test_requests.json` are strictly read-only. They are provided by the assignment creators and must NEVER be modified to fit the code or improve evaluation metrics. Code must adapt to these data files, not the other way around.
+- **CUSTOM DATA FILES ARE READ/WRITE**: The file `data/custom-hard-requests.json` is read/write. You are expected to create, modify, or expand this file with custom edge cases to improve evaluation and coverage (at least 3 cases required).

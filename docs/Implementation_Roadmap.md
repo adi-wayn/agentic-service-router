@@ -68,7 +68,7 @@ Each task below is designed to be executed as a single, atomic development unit 
 *   [x] **Task 4.2: Execute Benchmark (`eval/run_evaluation.py`)**
     *   Implement an asynchronous evaluation script to run all 11 cases through the compiled LangGraph.
     *   Automatically compute $Acc_{\text{action}}$, $Rec_{P1}$, $F1_{\text{macro}}$, and Brier Score / ECE.
-*   [ ] **Task 4.3: Metric Alignment & Adjustments**
+*   [x] **Task 4.3: Metric Alignment & Adjustments**
     *   Review metrics against the target v2 goals outlined in SRS Section 9.3.
     *   Fine-tune prompt directives (e.g., Sub-Clause Safety Masking fixes) or confidence weights to ensure the agent achieves $90.9\%$ routing accuracy and $100\%$ P1 safety recall.
 

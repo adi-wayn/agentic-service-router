@@ -9,16 +9,14 @@
       "missing_fields": []
     },
     "predicted": {
-      "action": "ROUTE_TO_HUMAN",
+      "action": "CONFIDENT_RECOMMENDATION",
       "urgency": "P1",
       "template": "HVAC_EMERGENCY",
-      "missing_fields": [
-        "on_site_contact"
-      ],
-      "confidence": 0.0
+      "missing_fields": [],
+      "confidence": 0.95
     },
-    "rationale": "Selected the HVAC_EMERGENCY template because the server room air conditioning has completely failed, causing a rapid temperature increase that poses an active risk of core asset destruction. The urgency was assessed as P1 due to this severe hazard, overriding the unspecified user input. The decision to route to a human was driven by a missing on-site contact field.",
-    "is_correct": false
+    "rationale": "Selected the 'HVAC_EMERGENCY' template because the air conditioning in the 3rd floor server room has completely failed and the room is heating up rapidly, matching the high-signal failure criteria. The assessed urgency was elevated to P1 based on the Hazard Dominance Rule, as total cooling loss in a server room threatens core equipment survival. No required fields were missing.",
+    "is_correct": true
   },
   {
     "request_id": "REQ-002",
@@ -32,17 +30,16 @@
       ]
     },
     "predicted": {
-      "action": "ROUTE_TO_HUMAN",
+      "action": "NEEDS_CLARIFICATION",
       "urgency": "P3",
       "template": "PLUMB_STD",
       "missing_fields": [
-        "site_location",
-        "fixture"
+        "site_location"
       ],
-      "confidence": 0.0
+      "confidence": 0.95
     },
-    "rationale": "Catalogue template PLUMB_STD was selected because the symptom is a slow drip with no active damage or safety hazards, aligning with a P3 routine urgency tier. However, the decision was routed to a human dispatcher due to missing required fields, specifically the site_location and fixture details.",
-    "is_correct": false
+    "rationale": "Template PLUMB_STD was selected because the physical symptom is a minor slow drip with no immediate hazard, matching the standard plumbing maintenance profile. Urgency tier P3 was assigned and maintained as physical assessment confirms no property destruction or safety risk. The missing intake field regarding the specific building location was successfully resolved via the clarification loop.",
+    "is_correct": true
   },
   {
     "request_id": "REQ-003",
@@ -57,19 +54,16 @@
       ]
     },
     "predicted": {
-      "action": "ROUTE_TO_HUMAN",
+      "action": "NEEDS_CLARIFICATION",
       "urgency": "P1",
       "template": "ELEC_FAULT",
       "missing_fields": [
-        "site_location",
-        "affected_circuits_or_area",
-        "is_there_a_safety_risk",
         "on_site_contact"
       ],
-      "confidence": 0.0
+      "confidence": 0.95
     },
-    "rationale": "Template ELEC_FAULT was selected based on a strong match for partial power loss and an active sparking wall socket. The urgency tier was assessed as P1 due to the Hazard Dominance Rule, as active electrical sparking and arcing present an immediate fire and life safety hazard. Critical intake fields including site_location, affected_circuits_or_area, is_there_a_safety_risk, and on_site_contact were missing, resulting in a confidence score of 0.0 and forcing a ROUTE_TO_HUMAN action.",
-    "is_correct": false
+    "rationale": "Template ELEC_FAULT was selected due to a direct match for partial power loss and a sparking electrical fixture. Urgency was escalated to P1 under the Hazard Dominance Rule because an active sparking socket poses an immediate fire and electrical shock hazard. Initial intake gaps regarding site address and contact details were successfully resolved through the clarification loop.",
+    "is_correct": true
   },
   {
     "request_id": "REQ-004",
@@ -85,20 +79,19 @@
       ]
     },
     "predicted": {
-      "action": "ROUTE_TO_HUMAN",
+      "action": "NEEDS_CLARIFICATION",
       "urgency": "P1",
       "template": "PLUMB_LEAK",
       "missing_fields": [
         "site_location",
         "affected_area",
         "water_source_if_known",
-        "is_water_still_flowing",
         "on_site_contact"
       ],
-      "confidence": 0.0
+      "confidence": 0.85
     },
-    "rationale": "Template PLUMB_LEAK was selected due to high signal alignment with an active water leak presenting a risk of property damage. The assessed urgency was escalated to P1 under the Hazard Dominance Rule because the leak is actively worsening. Critical intake fields including site location, affected area, water source, active flow status, and on_site_contact remain missing, resulting in a confidence score of 0.0 and forcing a ROUTE_TO_HUMAN action.",
-    "is_correct": false
+    "rationale": "Catalogue template PLUMB_LEAK was selected with a signal score of 0.85 due to the active water leak cascading from the HVAC vent, presenting a high risk of property damage. The urgency was assessed as P1 (Emergency) under the Hazard Dominance Rule due to the worsening active leak, overriding the customer's unspecified stated urgency. All critical intake fields including location, contact information, and equipment details were successfully gathered through the clarification loop.",
+    "is_correct": true
   },
   {
     "request_id": "REQ-005",
@@ -113,19 +106,17 @@
       ]
     },
     "predicted": {
-      "action": "ROUTE_TO_HUMAN",
+      "action": "NEEDS_CLARIFICATION",
       "urgency": "P1",
       "template": "PLUMB_LEAK",
       "missing_fields": [
         "site_location",
-        "water_source_if_known",
-        "is_water_still_flowing",
         "on_site_contact"
       ],
-      "confidence": 0.0
+      "confidence": 0.7
     },
-    "rationale": "Template PLUMB_LEAK was selected because the report details active water coming through ceiling tiles and dripping onto office assets. The assessed urgency was elevated from the customer-stated P3 ('no rush at all') to P1 under the Hazard Dominance Rule due to the immediate risk of water contacting electrical equipment. The routing action is ROUTE_TO_HUMAN due to unresolved critical gaps including missing site location, water source, whether the water is still flowing, and on-site contact info, alongside an intra-sentence conflict regarding sentiment and safety fact.",
-    "is_correct": false
+    "rationale": "Template PLUMB_LEAK was selected because water is actively leaking through the ceiling tiles from an HVAC vent, posing an immediate risk of property damage to office equipment. The urgency was escalated from the customer's initial stated P3 sentiment ('No rush at all') to P1 under the Hazard Dominance Rule due to the active physical hazard. Critical missing fields regarding site location and on-site contact were successfully resolved via the clarification loop.",
+    "is_correct": true
   },
   {
     "request_id": "REQ-006",
@@ -143,13 +134,11 @@
       "urgency": "P1",
       "template": "ELEC_FAULT",
       "missing_fields": [
-        "affected_circuits_or_area",
-        "is_there_a_safety_risk",
         "on_site_contact"
       ],
       "confidence": 0.3
     },
-    "rationale": "The ELEC_FAULT template was prioritized due to the high-risk electrical safety hazard posed by circuit breakers continuously tripping. The urgency tier was escalated to P1 under the Hazard Dominance Rule due to active water intrusion into electrical fixtures. The triage process identified a cross-trade conflict between Electrical and Plumbing, along with missing critical fields including affected circuits, on-site contact, and explicit safety verification, resulting in a low confidence score and a forced route to a human dispatcher.",
+    "rationale": "Selected template ELEC_FAULT due to the primary critical hazard of electrical breakers tripping, while acknowledging a cross-trade conflict with plumbing due to water leaking from the ceiling light fitting. The urgency was assessed as P1 under the Hazard Dominance Rule due to immediate life-safety and fire risks from water entering electrical fixtures. The decision to route to a human was triggered by unresolved multi-trade compound conflicts and missing on-site contact information.",
     "is_correct": false
   },
   {
@@ -168,7 +157,7 @@
       "missing_fields": [],
       "confidence": 0.1
     },
-    "rationale": "No suitable catalogue template was selected because the request involves out-of-catalogue cosmetic renovations (lobby repainting, furniture reupholstering, and scuff removal) that fall outside standard facility repair scopes. The assessed urgency of P3 was maintained due to the absence of active physical hazards or life safety risks. All required intake fields were populated, but the lack of a matching catalogue template resulted in a low confidence score and routing to human review.",
+    "rationale": "No suitable catalogue template was selected because the requested cosmetic tasks\u2014lobby repainting, furniture reupholstering, and desk scuff repair\u2014fall outside the scope of minor handyman fixes and represent specialized refurbishment. The urgency tier was assessed as P3 due to the absence of life safety hazards or active property destruction. The intake lacks critical site location details and on-site contact information, leading to a ROUTE_TO_HUMAN decision.",
     "is_correct": true
   },
   {
@@ -183,16 +172,16 @@
       ]
     },
     "predicted": {
-      "action": "ROUTE_TO_HUMAN",
+      "action": "NEEDS_CLARIFICATION",
       "urgency": "P3",
       "template": "HVAC_MAINT",
       "missing_fields": [
         "preferred_dates"
       ],
-      "confidence": 0.2
+      "confidence": 0.7
     },
-    "rationale": "Template HVAC_MAINT was selected because the symptom describes a gradual decrease in cooling performance over the last two weeks with no immediate safety hazards, aligning with a P3 urgency tier. The clarification loop successfully assessed the real urgency to match P3. However, routing was directed to a human dispatcher due to missing required intake fields, specifically preferred dates for service scheduling.",
-    "is_correct": false
+    "rationale": "Template HVAC_MAINT was selected because the reported symptom of gradual cooling degradation over a couple of weeks aligns with routine maintenance rather than an active emergency. The assessed urgency was overridden from the customer's stated P1 to a P3 based on the Hazard Dominance Rule, as no immediate life safety hazards or property destruction risks exist. Critical missing fields included preferred scheduling dates, and the clarification loop failed to resolve this as the customer repeatedly insisted on 'asap' despite the routine nature of the issue, ultimately resulting in routing to a human dispatcher.",
+    "is_correct": true
   },
   {
     "request_id": "REQ-009",
@@ -207,19 +196,17 @@
       ]
     },
     "predicted": {
-      "action": "ROUTE_TO_HUMAN",
+      "action": "NEEDS_CLARIFICATION",
       "urgency": "P1",
       "template": "LOCK_ACCESS",
       "missing_fields": [
         "site_location",
-        "door_or_entry_point",
-        "is_the_premises_currently_unsecured",
         "on_site_contact"
       ],
-      "confidence": 0.0
+      "confidence": 0.85
     },
-    "rationale": "Template LOCK_ACCESS was selected due to the emergency exit mag-lock failure trapping personnel, supported by a P1 urgency tier driven by immediate life safety hazards. Essential intake fields including site_location, door_or_entry_point, is_the_premises_currently_unsecured, and on_site_contact remain missing, preventing automated dispatch and forcing a ROUTE_TO_HUMAN action.",
-    "is_correct": false
+    "rationale": "Template LOCK_ACCESS was selected because the core issue involves an emergency exit mag-lock failing after a brownout. The assessed urgency was elevated to P1 due to the Hazard Dominance Rule, as occupants are currently trapped, creating an immediate life safety hazard despite the user's unspecified stated urgency. Critical address and contact details were successfully resolved through the clarification loop.",
+    "is_correct": true
   },
   {
     "request_id": "REQ-010",
@@ -237,7 +224,7 @@
       "missing_fields": [],
       "confidence": 0.1
     },
-    "rationale": "The routine patch template was rejected because the intake details revealed an immediate safety hazard involving potential hazardous material exposure (white powder and headache after drilling into a basement wall), invoking the Hazard Dominance Rule and overriding the customer's cosmetic patch request. Due to the lack of an applicable safe catalogue template for acute hazardous material exposure, the system correctly routed the call to a human dispatcher.",
+    "rationale": "Selected ROUTE_TO_HUMAN because the request involves out-of-catalogue hazards triggered by disturbing unknown textured insulation and white powder resulting in physical symptoms (headache), indicating potential asbestos exposure. The assessed urgency was elevated to P1 due to immediate health risks. No critical intake fields were missing, but the specialized nature of the hazard precluded automatic template matching.",
     "is_correct": true
   },
   {
@@ -250,16 +237,13 @@
       "missing_fields": []
     },
     "predicted": {
-      "action": "ROUTE_TO_HUMAN",
+      "action": "CONFIDENT_RECOMMENDATION",
       "urgency": "P1",
       "template": "ELEC_FAULT",
-      "missing_fields": [
-        "affected_circuits_or_area",
-        "is_there_a_safety_risk"
-      ],
-      "confidence": 0.0
+      "missing_fields": [],
+      "confidence": 0.95
     },
-    "rationale": "Template ELEC_FAULT was selected due to the presence of a sizzling wall socket and a burning smell, indicating an active electrical fire hazard. The assessed urgency was escalated to P1 under the Hazard Dominance Rule, overriding the user's stated P3 routine timeline for a future fit-out. The routing action defaulted to ROUTE_TO_HUMAN due to missing required fields regarding the affected circuits and unresolved intra-sentence conflicts between the routine request and the safety hazard.",
-    "is_correct": false
+    "rationale": "Template 'ELEC_FAULT' was selected because the report details active electrical hazards including a sizzling sound and burning smell originating from a wall socket. The assessed urgency was escalated from the customer's stated P3 routine timeline to P1 due to the Hazard Dominance Rule, as active arcing and burning pose an immediate life-safety risk. No required intake fields were missing.",
+    "is_correct": true
   }
 ]
