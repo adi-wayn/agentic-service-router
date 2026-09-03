@@ -75,10 +75,11 @@ Each task below is designed to be executed as a single, atomic development unit 
 ## Phase 5: Delivery & Polish (Hours 17 – 24)
 *Objective: Finalise the deliverables for presentation and integration.*
 
-*   [x] **Task 5.1: Command-Line Interface (CLI) & Rich TUI**
-    *   Created entry point (`src/main.py` with launcher at root `main.py`) with rich terminal styling, spinners, and service catalogue display.
-    *   Built `src/cli.py` for comprehensive formatting of 6-node triage decisions, rationales, and audit traces.
-    *   Implemented `src/session_tracker.py` for live Data Science benchmark evaluation tracking in batches of 3 cases (`/eval`, `/metrics`, `/history`, `/report`).
+*   [x] **Task 5.1: Command-Line Interface (CLI) & Rich TUI with Dynamic Evaluation**
+    *   Created dedicated entry point at `src/main.py` with zero Python files in root folder; modularized architecture into `src/core/` and `src/cli/` subpackages.
+    *   Built `src/cli/cli.py` for comprehensive Rich formatting of 6-node triage decisions, color-coded routing cards, block confidence bars, clarification history, rationales, and audit traces.
+    *   Implemented `src/cli/session_tracker.py` for live Data Science benchmark evaluation tracking in batches of 3 cases (`/eval`, `/metrics`, `/history`, `/report`, `/catalogue`).
+    *   Added multi-provider model fallback resilience and low-level SDK warning suppression.
     *   Added walkthrough: `docs/walkthroughs/task-5.1.md`.
 *   [ ] **Task 5.2: Final Documentation (`WRITEUP.md`)**
     *   Produce the final architectural summary covering the hybrid approach, the MCP analysis, the evaluation proof, and design trade-offs.
