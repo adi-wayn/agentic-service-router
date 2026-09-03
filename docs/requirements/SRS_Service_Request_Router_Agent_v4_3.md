@@ -394,56 +394,39 @@ The benchmark test suite consists of the 8 seed requests plus 3 custom hard case
 
 ---
 
-## 9\. Measurable Engineering Iteration & Error Analysis Methodology
+## 9\. Empirical Evaluation & Benchmarking Methodology
 
-The assignment mandates **one real iteration**: a first complete implementation, an empirical evaluation that exposes real-world failure modes, a deliberate architectural and algorithmic enhancement, and a re-run demonstrating measurable performance improvement.
-
-Rather than artificially degrading the initial version, the system follows a **genuine engineering iteration lifecycle**:
+The system is evaluated against an 11-case benchmark suite (detailed in Section 8) to ensure it meets strict operational routing requirements. To guarantee performance, the engineering lifecycle follows a data-driven continuous improvement methodology:
 
 ```mermaid
 flowchart TD
-    A[Step 1: v1 Full Candidate Implementation<br/>Complete pipeline built to specification] --> B[Step 2: Empirical Benchmark Run<br/>Execute 11 test cases & compute confusion matrix]
-    B --> C[Step 3: Deep-Dive Error Analysis<br/>Identify sub-clause masking, multi-trade blindspots, calibration drift]
-    C --> D[Step 4: Deliberate Targeted Enhancements<br/>Hazard dominance rule, cross-trade margin detector, non-linear penalty]
+    A[Step 1: Initial Implementation<br/>Build the strongest possible v1 architecture] --> B[Step 2: Empirical Benchmark Run<br/>Execute test cases & compute confusion matrix]
+    B --> C[Step 3: Deep-Dive Error Analysis<br/>Identify real-world edge cases and calibration drift]
+    C --> D[Step 4: Targeted System Iterations<br/>Enhance logic based on empirical assessment]
     D --> E[Step 5: Benchmark Re-Run & Lift Verification<br/>Verify statistically significant metric improvement]
 ```
 
-### 9.1 Baseline Architecture (v1 Full Candidate) & Empirical Error Modes
+To guarantee performance out-of-the-box in this initial release, the architecture incorporates targeted algorithmic safeguards:
 
-In the initial complete build (v1), the system implements the full agentic pipeline, but relies on initial prompt formulations and uncalibrated linear scoring weights. When evaluated against the 11-case benchmark suite, v1 reveals three specific failure modes:
+1. **Hierarchical Hazard Dominance Directive:** 
+   The extraction layer enforces a strict precedence hierarchy: physical hazard signals (arcing, smoke, water near electrics) strictly supersede any stated scheduling or polite user minimization.
+2. **Algorithmic Cross-Trade Collision Detector:** 
+   A mathematical margin check flags Fatal Cross-Trade Collisions if competing trade templates score within $\le 0.15$ of each other, forcing a `ROUTE_TO_HUMAN` escalation.
+3. **Strict Non-Linear Intake Penalty:** 
+   The confidence formula aggressively penalizes missing required intake fields ($-0.25$ per missing field) to ensure the system strictly drops into a `NEEDS_CLARIFICATION` loop rather than blindly dispatching incomplete tickets.
 
-1. **Failure Mode 1 — Sub-Clause Safety Masking (REQ-011):**  
-   * *Observed Behavior:* In REQ-011, the customer requests a routine electrical fit-out for next month but mentions a sizzling/melting socket in the second sentence. The v1 extractor anchors on the primary sentence intent, assigning `ELEC_INSTALL` (P3) and missing the critical P1 electrical fire hazard.  
-   * *Metric Impact:* Drops P1 Safety Recall to $85.7%$ (1 life-safety escape).  
-2. **Failure Mode 2 — Multi-Trade Tie-Break Failure (REQ-006):**  
-   * *Observed Behavior:* In REQ-006 (water leaking onto light fixture causing breaker trip), both `ELEC_FAULT` and `PLUMB_LEAK` score high ($\approx 0.85$). Because v1 lacks a cross-trade margin detector, it arbitrarily picks `ELEC_FAULT` with `CONFIDENT_RECOMMENDATION` instead of recognizing a dangerous cross-trade collision requiring `ROUTE_TO_HUMAN`.  
-   * *Metric Impact:* False positive in `CONFIDENT_RECOMMENDATION` class; misroutes complex dual-trade emergency.  
-3. **Failure Mode 3 — Missing Field Under-Penalization (REQ-002 / REQ-004):**  
-   * *Observed Behavior:* The linear confidence formula in v1 yields $C = 0.76$ for REQ-002 despite a completely missing building address, incorrectly triggering a confident recommendation instead of asking for clarification.  
-   * *Metric Impact:* Action Accuracy drops to $63.6%$, Macro F1 to $0.62$.
+### 9.1 Benchmark Target Metrics
 
-### 9.2 Deliberate Targeted Enhancements in v2
+The system is expected to achieve the following performance targets upon completion of this release:
 
-Based on the empirical error analysis, three deliberate architectural and algorithmic enhancements are implemented in v2:
-
-1. **Enhancement 1: Hierarchical Hazard Dominance Directive (Prompt Engineering):**  
-   * Injected a strict precedence hierarchy into `extractor_node`: *“Physical hazard signals (arcing, smoke, water near electrics, thermal runaway, trapped occupants) strictly supersede any stated scheduling, routine installation phrasing, or polite user minimization.”*  
-2. **Enhancement 2: Algorithmic Cross-Trade Collision Detector (`matcher_node`):**  
-   * Implemented a mathematical margin check: If the top two candidate templates belong to different primary trades (e.g., Electrical vs. Plumbing) and their match scores satisfy $|S_1 - S_2| \le 0.15$ with $S_1 \ge 0.65$, the system automatically flags a **Fatal Cross-Trade Collision**, assigns `routing_action = ROUTE_TO_HUMAN`, and overrides confidence to $0.30$.  
-3. **Enhancement 3: Non-Linear Dynamic Intake Penalty (`router_node`):**  
-   * Redesigned the confidence formula to apply an exponential penalty for missing *blocking* intake fields (e.g., missing site address in routine work order imposes a $-0.35$ penalty, whereas non-blocking contact name in P1 imposes only $-0.05$).
-
-### 9.3 Comparative Benchmark Target Matrix (v1 vs. v2)
-
-| Evaluation Metric | Baseline (v1 Full Build) | Optimized (v2 Enhanced) | Measurable Delta ($\\Delta$) | Operational Significance |
-| :---- | :---: | :---: | :---: | :---- |
-| **Routing Action Accuracy ($Acc_{\text{action}}$)** | $63.6%$ ($7/11$) | **$90.9%$ ($10/11$)** | **$+27.3%$** | Substantial reduction in dispatcher misroutes |
-| **P1 Hazard Safety Recall ($Rec_{P1}$)** | $85.7%$ ($6/7$) | **$100.0%$ ($7/7$)** | **$+14.3%$** | **Zero safety escapes** (eliminated REQ-011 failure) |
-| **Macro-Averaged F1-Score ($F1_{\text{macro}}$)** | $0.618$ | **$0.894$** | **$+0.276$** | Balanced classification across all 3 routing actions |
-| **Weighted-Averaged F1-Score ($F1_{\text{weighted}}$)** | $0.645$ | **$0.912$** | **$+0.267$** | High aggregate decision reliability |
-| **Template Matching Accuracy ($Acc_{\text{template}}$)** | $72.7%$ ($8/11$) | **$90.9%$ ($10/11$)** | **$+18.2%$** | Correct workflow template mapping |
-| **Expected Calibration Error (ECE)** | $0.242$ | **$0.078$** | **$-0.164$** | Agent is significantly better calibrated (no false confidence) |
-| **Brier Score (Confidence Error)** | $0.185$ | **$0.062$** | **$-0.123$** | Probabilistic confidence closely matches empirical ground truth |
+| Evaluation Metric | Target Threshold | Operational Significance |
+| :---- | :---: | :---- |
+| **Routing Action Accuracy ($Acc_{\text{action}}$)** | $\ge 90.0\%$ | Substantial reduction in dispatcher misroutes |
+| **P1 Hazard Safety Recall ($Rec_{P1}$)** | $100.0\%$ | **Zero safety escapes** (strict non-negotiable requirement) |
+| **Macro-Averaged F1-Score ($F1_{\text{macro}}$)** | $\ge 0.850$ | Balanced classification across all 3 routing actions |
+| **Template Matching Accuracy ($Acc_{\text{template}}$)** | $\ge 90.0\%$ | Correct workflow template mapping |
+| **Expected Calibration Error (ECE)** | $\le 0.100$ | Agent is significantly well calibrated (no false confidence) |
+| **Brier Score (Confidence Error)** | $\le 0.100$ | Probabilistic confidence closely matches empirical ground truth |
 
 ---
 

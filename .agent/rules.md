@@ -8,6 +8,7 @@
 ## 2. Determinism & Reliability
 *   **No Mocks:** The `service_catalogue.json` must be dynamically loaded and queried via standard Python, not faked or hardcoded inside the nodes.
 *   **Pydantic Enforcement:** All LLM outputs must be coerced via `with_structured_output` using strict Pydantic schemas (e.g., `ServiceRouterDecision`, `ExtractedEntities`).
+    *   *Strict Schema Adherence:* Do not hallucinate or access dynamic properties (like `dynamic_intake_fields`) on Pydantic models. Only use fields explicitly defined in `src/models.py`.
 *   **Temperature:** All cognitive node LLM calls must be executed at `Temperature = 0.0` to maximize determinism.
 
 ## 3. Workflow

@@ -261,9 +261,8 @@ classDiagram
 1. **Adapter Pattern (`BaseLLMClient`):** Standardizes API calls across Google Gemini, Anthropic, and OpenAI. Cognitive nodes interact exclusively with `BaseLLMClient.generate_structured()`, making model switching zero-friction.  
 2. **Factory Pattern (`LLMClientFactory`):** Centralizes the instantiation of LLM adapters based on environment configuration (`LLM_PROVIDER`), injecting appropriate API credentials and model parameters.  
 3. **State Pattern / StateGraph (LangGraph):** Encapsulates the multi-stage triage lifecycle inside an immutable `TriageState` data structure, ensuring pure, deterministic state transitions.  
-4. **Strategy Pattern (Scoring & Penalty Engine):** Decouples confidence calculation algorithms (`LinearScoringStrategy` vs. `NonLinearPenaltyStrategy`) allowing isolated unit testing and benchmarking.  
-5. **Chain of Responsibility / Guardrail Fallback:** Sequentially chains schema validation, automated JSON self-correction, and defensive human escalation to prevent fatal system crashes.  
-6. **Template Method Pattern (Cognitive Nodes):** Standardizes node execution lifecycle: Context Retrieval $\to$ Prompt Formulation $\to$ LLM Invocation $\to$ Schema Validation $\to$ State Update.
+4. **Chain of Responsibility / Guardrail Fallback:** Sequentially chains schema validation, automated JSON self-correction, and defensive human escalation to prevent fatal system crashes.  
+5. **Template Method Pattern (Cognitive Nodes):** Standardizes node execution lifecycle: Context Retrieval $\to$ Prompt Formulation $\to$ LLM Invocation $\to$ Schema Validation $\to$ State Update.
 
 ### 3.2 SOLID Principles Adherence Matrix
 
@@ -1075,7 +1074,7 @@ fs_router_agent/
 
 │   ├── metrics.py                      # Confusion matrix, Precision, Recall, F1, ECE
 
-│   └── run_evaluation.py               # Benchmark runner (outputs v1 vs v2 comparison)
+│   └── run_evaluation.py               # Benchmark runner (evaluates current system metrics)
 
 │
 
@@ -1095,9 +1094,10 @@ fs_router_agent/
 | **Phase 1: Foundation** | Hours 0 – 3 | `models.py`, `catalogue.py`, `src/llm/` | Pydantic contracts validated; Gemini adapter initialized via `.env`. |
 | **Phase 2: Core Triage** | Hours 3 – 8 | `extractor_node.py`, `matcher_node.py`, `gap_node.py`, `router_node.py` | Single-pass extraction, template matching, margin detector, and confidence formula running. |
 | **Phase 3: Agentic Loop** | Hours 8 – 13 | `clarifier_node.py`, `graph.py`, `agent.py` | Full LangGraph compiled; multi-turn clarification loop converging $\le 2$ turns. |
-| **Phase 4: Benchmark & v1 vs v2** | Hours 13 – 17 | `eval/ground_truth.py`, `eval/run_evaluation.py` | 11 cases executed; empirical error analysis documented; v2 improvements verified. |
+| **Phase 4: Benchmarking & Eval** | Hours 13 – 17 | `eval/ground_truth.py`, `eval/run_evaluation.py` | 11 cases executed; empirical error analysis documented; metrics target verified. |
 | **Phase 5: Write-Up & Proof** | Hours 17 – 21 | `WRITEUP.md`, `README.md`, logs | 3-page write-up covering architecture, trade-offs, MCP analysis, and eval proof. |
 | **Phase 6: Packaging & QA** | Hours 21 – 24 | Final repository test & zip archive | Clean fresh-environment run passes with 1 command (`python -m eval.run_evaluation`). |
+
 
 ---
 

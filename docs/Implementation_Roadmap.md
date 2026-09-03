@@ -39,7 +39,7 @@ Each task below is designed to be executed as a single, atomic development unit 
 *   [x] **Task 2.3: Node 3 - Conflict & Gap Detection Node (`src/nodes/gap_node.py`)**
     *   Compute exact missing required fields using set difference logic.
     *   Implement the **Algorithmic Cross-Trade Collision Detector**: Flag fatal ties if $|S_1 - S_2| \le 0.15$ across different trades.
-*   [ ] **Task 2.4: Node 4 - Confidence & Routing Node (`src/nodes/router_node.py`)**
+*   [x] **Task 2.4: Node 4 - Confidence & Routing Node (`src/nodes/router_node.py`)**
     *   Implement the non-linear composite confidence scoring formula.
     *   Apply dynamic penalties for missing fields and conflicts.
     *   Assign strictly banded routing actions: `CONFIDENT_RECOMMENDATION` ($\ge 0.75$), `NEEDS_CLARIFICATION` ($0.40-0.74$), or `ROUTE_TO_HUMAN` ($< 0.40$).
