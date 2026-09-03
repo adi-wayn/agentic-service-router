@@ -18,7 +18,9 @@ class TriageAgent:
         """Exports the Mermaid visualization of the LangGraph to disk."""
         try:
             mermaid_str = self.app.get_graph().draw_mermaid()
-            with open("graph_visualization.md", "w") as f:
+            # Ensure docs directory exists
+            os.makedirs("docs", exist_ok=True)
+            with open("docs/graph_visualization.md", "w") as f:
                 f.write("# FS-ID Agentic Loop Visualization\n\n")
                 f.write("```mermaid\n")
                 f.write(mermaid_str)
