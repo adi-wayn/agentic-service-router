@@ -7,18 +7,19 @@ from typing import Type, Optional, Callable, Any
 from google import genai
 from google.genai import types
 
+from src.llm.base import BaseLLMClient, T
+from src.config import config
+
 # Natively suppress the Google GenAI SDK advisory notice regarding Automatic Function Calling
 try:
     from google.genai.models import Models
+
     Models._logged_afc_warning = True
 except Exception:
     pass
 
 logging.getLogger("google.genai").setLevel(logging.ERROR)
 logging.getLogger("google").setLevel(logging.ERROR)
-
-from src.llm.base import BaseLLMClient, T
-from src.config import config
 
 FALLBACK_MODELS = [
     "gemini-3.1-flash-lite",
@@ -64,9 +65,13 @@ class GeminiLLMAdapter(BaseLLMClient):
         self.client = genai.Client(api_key=api_key)
         self.model_name = model_name
 
-    def _execute_with_retry(self, fn: Callable[[str], Any], max_retries: int = 3) -> Any:
+    def _execute_with_retry(
+        self, fn: Callable[[str], Any], max_retries: int = 3
+    ) -> Any:
         """Execute a GenAI call with exponential backoff on transient errors and model fallback on quota exhaustion."""
-        models_to_try = [self.model_name] + [m for m in FALLBACK_MODELS if m != self.model_name]
+        models_to_try = [self.model_name] + [
+            m for m in FALLBACK_MODELS if m != self.model_name
+        ]
         last_error = None
 
         for model in models_to_try:
@@ -78,11 +83,18 @@ class GeminiLLMAdapter(BaseLLMClient):
                     last_error = e
                     err_str = str(e)
                     # If daily quota limit is exhausted for this specific model, switch immediately to next model
-                    if "GenerateRequestsPerDay" in err_str or "quota limit: 500" in err_str:
+                    if (
+                        "GenerateRequestsPerDay" in err_str
+                        or "quota limit: 500" in err_str
+                    ):
                         break
                     # Transient rate limit (RPM) or temporary service spike: back off and retry
-                    elif "429" in err_str or "503" in err_str or "RESOURCE_EXHAUSTED" in err_str:
-                        sleep_secs = 2 ** attempt + 1
+                    elif (
+                        "429" in err_str
+                        or "503" in err_str
+                        or "RESOURCE_EXHAUSTED" in err_str
+                    ):
+                        sleep_secs = 2**attempt + 1
                         time.sleep(sleep_secs)
                         continue
                     else:
@@ -99,6 +111,7 @@ class GeminiLLMAdapter(BaseLLMClient):
         system_instruction: Optional[str] = None,
     ) -> T:
         """Generate structured JSON output validated against a Pydantic schema."""
+
         def _call(model: str) -> T:
             gen_config = types.GenerateContentConfig(
                 temperature=0.0,
@@ -121,6 +134,7 @@ class GeminiLLMAdapter(BaseLLMClient):
         system_instruction: Optional[str] = None,
     ) -> str:
         """Generate plain text output."""
+
         def _call(model: str) -> str:
             gen_config = types.GenerateContentConfig(
                 temperature=0.0,

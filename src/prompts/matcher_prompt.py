@@ -43,24 +43,36 @@ You must assign a `signal_score` between 0.0 and 1.0 to each candidate template 
 Respond strictly with valid JSON conforming to the CatalogueMatchResult schema.
 """
 
+
 def build_matcher_user_prompt(extracted_context: dict, catalogue: list) -> str:
     # We only include essential extraction fields to keep it concise
-    context_str = json.dumps({
-        "primary_trade": extracted_context.get("primary_trade"),
-        "secondary_trade": extracted_context.get("secondary_trade"),
-        "symptom_description": extracted_context.get("symptom_description"),
-        "specific_equipment": extracted_context.get("specific_equipment"),
-        "assessed_real_urgency": extracted_context.get("assessed_real_urgency"),
-        "has_safety_hazard": extracted_context.get("safety_assessment", {}).get("has_immediate_hazard", False)
-    }, indent=2)
-    
-    catalogue_str = json.dumps([{
-        "id": t["id"],
-        "category": t["category"],
-        "urgency_tier": t["urgency_tier"],
-        "signals": t["signals"]
-    } for t in catalogue], indent=2)
-    
+    context_str = json.dumps(
+        {
+            "primary_trade": extracted_context.get("primary_trade"),
+            "secondary_trade": extracted_context.get("secondary_trade"),
+            "symptom_description": extracted_context.get("symptom_description"),
+            "specific_equipment": extracted_context.get("specific_equipment"),
+            "assessed_real_urgency": extracted_context.get("assessed_real_urgency"),
+            "has_safety_hazard": extracted_context.get("safety_assessment", {}).get(
+                "has_immediate_hazard", False
+            ),
+        },
+        indent=2,
+    )
+
+    catalogue_str = json.dumps(
+        [
+            {
+                "id": t["id"],
+                "category": t["category"],
+                "urgency_tier": t["urgency_tier"],
+                "signals": t["signals"],
+            }
+            for t in catalogue
+        ],
+        indent=2,
+    )
+
     return f"""Please analyze the following extracted request context against the provided active service catalogue.
 
 EXTRACTED REQUEST CONTEXT:

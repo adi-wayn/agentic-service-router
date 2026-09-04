@@ -13,24 +13,26 @@ INSTRUCTIONS:
 - Output ONLY the requested JSON schema containing the list of ClarificationQuestions.
 """
 
+
 def build_clarifier_user_prompt(
-    raw_text: str, 
-    missing_fields: List[str], 
-    conflicts: List[str], 
-    clarification_history: List[Dict[str, str]]
+    raw_text: str,
+    missing_fields: List[str],
+    conflicts: List[str],
+    clarification_history: List[Dict[str, str]],
 ) -> str:
     """Builds the context payload for the clarifier node."""
     prompt = f"ORIGINAL REQUEST:\n{raw_text}\n\n"
-    
+
     if missing_fields:
         prompt += f"MISSING REQUIRED FIELDS:\n{missing_fields}\n\n"
-        
+
     if conflicts:
         prompt += f"DETECTED CONFLICTS:\n{conflicts}\n\n"
-        
+
     if clarification_history:
-        prompt += f"PRIOR Q&A HISTORY (DO NOT REPEAT THESE):\n{clarification_history}\n\n"
-        
+        prompt += (
+            f"PRIOR Q&A HISTORY (DO NOT REPEAT THESE):\n{clarification_history}\n\n"
+        )
+
     prompt += "TASK:\nGenerate up to 3 targeted clarification questions to resolve the gaps/conflicts above."
     return prompt
-

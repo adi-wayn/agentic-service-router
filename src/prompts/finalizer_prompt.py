@@ -1,5 +1,11 @@
 import json
-from src.models import ExtractedEntities, CatalogueMatchResult, GapAndConflictResult, ConfidenceAndRoutingResult, ClarificationState
+from src.models import (
+    ExtractedEntities,
+    CatalogueMatchResult,
+    GapAndConflictResult,
+    ConfidenceAndRoutingResult,
+    ClarificationState,
+)
 
 FINALIZER_SYSTEM_PROMPT = """You are the final validation and synthesis stage of an expert facility operations triage system (Field Services Intelligent Dispatcher).
 Your critical mission is to review the aggregated results of the 6-Node triage pipeline and produce a concise, explainable, and objective rationale for the final routing decision, fulfilling FR-09 (Explainability & Audit Trail Generation).
@@ -20,27 +26,33 @@ You must output exactly two things based on the provided triage pipeline context
 Keep the tone highly concise, professional, objective, and analytical. Do not invent new facts; rely solely on the provided pipeline context.
 """
 
+
 def build_finalizer_user_prompt(
-    extracted: ExtractedEntities, 
-    matched: CatalogueMatchResult, 
-    gaps: GapAndConflictResult, 
-    routing: ConfidenceAndRoutingResult, 
-    clarification: ClarificationState
+    extracted: ExtractedEntities,
+    matched: CatalogueMatchResult,
+    gaps: GapAndConflictResult,
+    routing: ConfidenceAndRoutingResult,
+    clarification: ClarificationState,
 ) -> str:
     """Builds the context payload for the finalizer node."""
     context_parts = []
-    
+
     if extracted:
-        context_parts.append(f"Extracted Entities:\n{extracted.model_dump_json(indent=2)}")
+        context_parts.append(
+            f"Extracted Entities:\n{extracted.model_dump_json(indent=2)}"
+        )
     if matched:
-        context_parts.append(f"Catalogue Matching:\n{matched.model_dump_json(indent=2)}")
+        context_parts.append(
+            f"Catalogue Matching:\n{matched.model_dump_json(indent=2)}"
+        )
     if gaps:
         context_parts.append(f"Gaps & Conflicts:\n{gaps.model_dump_json(indent=2)}")
     if routing:
         context_parts.append(f"Routing Decision:\n{routing.model_dump_json(indent=2)}")
     if clarification and clarification.clarification_history:
-        context_parts.append(f"Clarification Q&A History:\n{json.dumps(clarification.clarification_history, indent=2)}")
-        
+        context_parts.append(
+            f"Clarification Q&A History:\n{json.dumps(clarification.clarification_history, indent=2)}"
+        )
+
     prompt_context = "\n\n".join(context_parts)
     return f"Please synthesize the final rationale and counterfactual condition based on the following triage pipeline context:\n\n{prompt_context}"
-

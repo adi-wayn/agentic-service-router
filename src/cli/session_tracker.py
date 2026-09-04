@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 import json
 import os
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 from eval.metrics import (
     compute_confusion_matrix,
@@ -28,6 +28,7 @@ from src.models import ServiceRouterDecision
 @dataclass
 class SessionCase:
     """Represents a single triage case evaluated dynamically during a session."""
+
     case_number: int
     raw_text: str
     predicted_template: Optional[str]
@@ -43,7 +44,9 @@ class SessionCase:
     expected_action: Optional[str] = None
     expected_urgency: Optional[str] = None
     expected_missing_fields: Optional[List[str]] = None
-    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = field(
+        default_factory=lambda: datetime.now(timezone.utc).isoformat()
+    )
 
 
 class SessionTracker:
@@ -70,7 +73,9 @@ class SessionTracker:
         """Check if evaluation mode is active."""
         return self._eval_active
 
-    def record_case(self, raw_text: str, decision: Optional[ServiceRouterDecision]) -> SessionCase:
+    def record_case(
+        self, raw_text: str, decision: Optional[ServiceRouterDecision]
+    ) -> SessionCase:
         """Record a newly routed case from a ServiceRouterDecision.
 
         Args:
@@ -93,9 +98,13 @@ class SessionTracker:
 
         if decision is not None:
             if decision.match_result:
-                predicted_template = getattr(decision.match_result, "top_template_id", None)
+                predicted_template = getattr(
+                    decision.match_result, "top_template_id", None
+                )
 
-            if decision.routing_result and getattr(decision.routing_result, "routing_action", None):
+            if decision.routing_result and getattr(
+                decision.routing_result, "routing_action", None
+            ):
                 predicted_action = decision.routing_result.routing_action
             elif getattr(decision, "initial_routing_action", None):
                 predicted_action = decision.initial_routing_action
@@ -103,14 +112,18 @@ class SessionTracker:
                 predicted_action = "UNKNOWN"
 
             if decision.extracted_entities:
-                predicted_urgency = getattr(decision.extracted_entities, "assessed_real_urgency", "UNKNOWN")
+                predicted_urgency = getattr(
+                    decision.extracted_entities, "assessed_real_urgency", "UNKNOWN"
+                )
 
             if getattr(decision, "initial_missing_fields", None) is not None:
                 predicted_missing = list(decision.initial_missing_fields)
             elif decision.gap_result:
                 predicted_missing = list(decision.gap_result.missing_required_fields)
 
-            if decision.routing_result and hasattr(decision.routing_result, "confidence_score"):
+            if decision.routing_result and hasattr(
+                decision.routing_result, "confidence_score"
+            ):
                 score = decision.routing_result.confidence_score
                 confidence = float(score) if score is not None else 0.0
 
@@ -118,11 +131,13 @@ class SessionTracker:
                 loop_count = decision.clarification_state.loop_count
                 if decision.clarification_state.clarification_questions:
                     generated_questions = [
-                        q.target_field for q in decision.clarification_state.clarification_questions
+                        q.target_field
+                        for q in decision.clarification_state.clarification_questions
                     ]
                 elif decision.clarification_state.clarification_history:
                     generated_questions = [
-                        item.get("question", "") for item in decision.clarification_state.clarification_history
+                        item.get("question", "")
+                        for item in decision.clarification_state.clarification_history
                     ]
 
             if decision.finalizer_synthesis:
@@ -174,7 +189,9 @@ class SessionTracker:
                     case.expected_urgency = case.predicted_urgency
                     case.expected_missing_fields = list(case.predicted_missing_fields)
                 else:
-                    case.expected_template = expected_template or case.predicted_template
+                    case.expected_template = (
+                        expected_template or case.predicted_template
+                    )
                     case.expected_action = expected_action or case.predicted_action
                     case.expected_urgency = expected_urgency or case.predicted_urgency
                     case.expected_missing_fields = (
@@ -214,7 +231,9 @@ class SessionTracker:
             Dict containing the metrics payload.
         """
         target_cases = [
-            c for c in (cases if cases is not None else self.cases) if c.is_correct is not None
+            c
+            for c in (cases if cases is not None else self.cases)
+            if c.is_correct is not None
         ]
         if not target_cases:
             return {}
@@ -222,10 +241,14 @@ class SessionTracker:
         y_true_action = [c.expected_action or c.predicted_action for c in target_cases]
         y_pred_action = [c.predicted_action for c in target_cases]
 
-        y_true_urgency = [c.expected_urgency or c.predicted_urgency for c in target_cases]
+        y_true_urgency = [
+            c.expected_urgency or c.predicted_urgency for c in target_cases
+        ]
         y_pred_urgency = [c.predicted_urgency for c in target_cases]
 
-        y_true_temp = [c.expected_template or c.predicted_template for c in target_cases]
+        y_true_temp = [
+            c.expected_template or c.predicted_template for c in target_cases
+        ]
         y_pred_temp = [c.predicted_template for c in target_cases]
 
         y_true_missing = [
@@ -271,7 +294,9 @@ class SessionTracker:
         """Return all recorded session cases."""
         return self.cases
 
-    def export_report(self, filepath: Optional[str] = None, batch_label: Optional[str] = None) -> str:
+    def export_report(
+        self, filepath: Optional[str] = None, batch_label: Optional[str] = None
+    ) -> str:
         """Export the comprehensive evaluation report to JSON.
 
         Args:
@@ -283,7 +308,9 @@ class SessionTracker:
         """
         timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         if filepath is None:
-            prefix = f"session_batch_{batch_label}_" if batch_label else "session_report_"
+            prefix = (
+                f"session_batch_{batch_label}_" if batch_label else "session_report_"
+            )
             filepath = os.path.join("data", f"{prefix}{timestamp}.json")
 
         os.makedirs(os.path.dirname(os.path.abspath(filepath)), exist_ok=True)

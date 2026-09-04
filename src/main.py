@@ -15,11 +15,11 @@ project_root = str(Path(__file__).resolve().parent.parent)
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from rich.prompt import Prompt
+from rich.prompt import Prompt  # noqa: E402
 
-from src.core.agent import TriageAgent
-from src.catalogue import ServiceCatalogue
-from src.cli import (
+from src.core.agent import TriageAgent  # noqa: E402
+from src.catalogue import ServiceCatalogue  # noqa: E402
+from src.cli import (  # noqa: E402
     console,
     display_welcome_banner,
     display_service_catalogue,
@@ -43,7 +43,10 @@ def main() -> None:
 
     # Load catalogue and agent with spinner
     try:
-        with console.status("📦 Loading Service Catalogue & Initializing LangGraph Agent...", spinner="dots"):
+        with console.status(
+            "📦 Loading Service Catalogue & Initializing LangGraph Agent...",
+            spinner="dots",
+        ):
             catalogue = ServiceCatalogue()
             agent = TriageAgent()
     except Exception as e:
@@ -90,7 +93,9 @@ def main() -> None:
                 console.print("  [dim]No evaluated cases in session to report.[/dim]\n")
                 continue
             report_path = tracker.export_report()
-            console.print(f"  📁 [dim]Report saved to:[/dim] [cyan]{report_path}[/cyan]\n")
+            console.print(
+                f"  📁 [dim]Report saved to:[/dim] [cyan]{report_path}[/cyan]\n"
+            )
             continue
 
         if cmd == "/catalogue":
@@ -113,10 +118,14 @@ def main() -> None:
         request_id = f"CLI-{uuid.uuid4().hex[:6].upper()}"
         try:
             with get_thinking_status():
-                decision = agent.run(request_id=request_id, channel="cli", raw_text=query)
+                decision = agent.run(
+                    request_id=request_id, channel="cli", raw_text=query
+                )
 
             if decision is None:
-                display_error("The agent could not complete triage for this request. Please check API quota or logs.")
+                display_error(
+                    "The agent could not complete triage for this request. Please check API quota or logs."
+                )
                 continue
 
             display_routing_result(decision)
@@ -124,7 +133,9 @@ def main() -> None:
 
             # If evaluation mode is on, solicit feedback
             if tracker.is_eval_active():
-                is_correct, exp_tmpl, exp_act, exp_urg, exp_missing = prompt_feedback(template_ids)
+                is_correct, exp_tmpl, exp_act, exp_urg, exp_missing = prompt_feedback(
+                    template_ids
+                )
                 if is_correct is not None:
                     batch_triggered = tracker.record_feedback(
                         case_number=case.case_number,
@@ -138,9 +149,15 @@ def main() -> None:
                     # Triggered batch evaluation every 3 evaluated cases
                     if batch_triggered:
                         batch_metrics = tracker.compute_data_science_metrics()
-                        batch_report = tracker.export_report(batch_label=f"batch_{tracker.batch_count}")
-                        display_batch_notification(tracker.batch_count, tracker.batch_size, batch_report)
-                        display_metrics(batch_metrics, title_prefix=f"Batch #{tracker.batch_count}")
+                        batch_report = tracker.export_report(
+                            batch_label=f"batch_{tracker.batch_count}"
+                        )
+                        display_batch_notification(
+                            tracker.batch_count, tracker.batch_size, batch_report
+                        )
+                        display_metrics(
+                            batch_metrics, title_prefix=f"Batch #{tracker.batch_count}"
+                        )
 
         except KeyboardInterrupt:
             console.print("\n  [dim]Operation cancelled by user.[/dim]")

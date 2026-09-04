@@ -2,6 +2,7 @@ import json
 from typing import List, Dict, Any, Optional
 from src.config import config
 
+
 class ServiceCatalogue:
     _instance = None
     _templates: Dict[str, Any] = {}
@@ -16,20 +17,22 @@ class ServiceCatalogue:
     def _load_catalogue(self) -> None:
         """Loads and caches the service catalogue from the JSON file into a Hash Map."""
         try:
-            with open(config.CATALOGUE_PATH, 'r', encoding='utf-8') as f:
+            with open(config.CATALOGUE_PATH, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                
+
                 # Convert the list into a dictionary keyed by 'id' for O(1) lookups
                 raw_templates = data.get("templates", [])
                 self._templates = {t["id"]: t for t in raw_templates if "id" in t}
-                
+
                 self._metadata = {
                     "catalogue_version": data.get("catalogue_version"),
                     "notes": data.get("notes"),
-                    "urgency_tiers": data.get("urgency_tiers", {})
+                    "urgency_tiers": data.get("urgency_tiers", {}),
                 }
         except FileNotFoundError:
-            raise RuntimeError(f"Service catalogue file not found at {config.CATALOGUE_PATH}")
+            raise RuntimeError(
+                f"Service catalogue file not found at {config.CATALOGUE_PATH}"
+            )
         except json.JSONDecodeError as e:
             raise RuntimeError(f"Failed to parse service catalogue JSON: {e}")
 

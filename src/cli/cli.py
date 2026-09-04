@@ -27,6 +27,7 @@ console = Console()
 # Welcome & Goodbye
 # ---------------------------------------------------------------------------
 
+
 def display_welcome_banner() -> None:
     """Display the FS-ID welcome banner with project metadata."""
     active_provider = config.LLM_PROVIDER.upper() if config.LLM_PROVIDER else "GEMINI"
@@ -38,16 +39,24 @@ def display_welcome_banner() -> None:
     banner.append("LangGraph 6-Node State Machine\n", style="bold magenta")
     banner.append("  LLM Engine:   ", style="dim")
     banner.append(f"{active_provider} ", style="bold green")
-    banner.append("(Multi-Provider Support: Gemini / Anthropic / OpenAI)\n", style="dim")
-    banner.append("  Pipeline:     Real-Time Triage • Dynamic Evaluation Tracking\n", style="dim")
+    banner.append(
+        "(Multi-Provider Support: Gemini / Anthropic / OpenAI)\n", style="dim"
+    )
+    banner.append(
+        "  Pipeline:     Real-Time Triage • Dynamic Evaluation Tracking\n", style="dim"
+    )
 
-    console.print(Panel(
-        banner,
-        border_style="bright_blue",
-        padding=(0, 2),
-    ))
+    console.print(
+        Panel(
+            banner,
+            border_style="bright_blue",
+            padding=(0, 2),
+        )
+    )
     console.print("  [dim]Type a service request to begin, or use a command:[/dim]")
-    console.print("  [dim]/eval · /metrics · /history · /report · /catalogue · quit[/dim]\n")
+    console.print(
+        "  [dim]/eval · /metrics · /history · /report · /catalogue · quit[/dim]\n"
+    )
 
 
 def display_goodbye() -> None:
@@ -135,14 +144,14 @@ def display_routing_result(decision: Any) -> None:
 
     # Resolve final routing action (check routing_result first, fallback to initial_routing_action)
     action_raw = None
-    if decision.routing_result and getattr(decision.routing_result, "routing_action", None):
+    if decision.routing_result and getattr(
+        decision.routing_result, "routing_action", None
+    ):
         action_raw = decision.routing_result.routing_action
     elif getattr(decision, "initial_routing_action", None):
         action_raw = decision.initial_routing_action
     action_raw = action_raw or "UNKNOWN"
-    action_label, action_style = ACTION_STYLES.get(
-        action_raw, (action_raw, "bold")
-    )
+    action_label, action_style = ACTION_STYLES.get(action_raw, (action_raw, "bold"))
 
     cs = getattr(decision, "clarification_state", None)
     loop_count = getattr(cs, "loop_count", 0) if cs else 0
@@ -161,8 +170,13 @@ def display_routing_result(decision: Any) -> None:
     lines.append("  Action:     ", style="dim")
     if loop_count > 0:
         lines.append(f"{action_label} ", style=action_style)
-        resolution_style = "bold green" if action_raw == "CONFIDENT_RECOMMENDATION" else "dim italic"
-        lines.append(f"(Resolved via Clarification Loop • {loop_count} turn{'s' if loop_count > 1 else ''})\n", style=resolution_style)
+        resolution_style = (
+            "bold green" if action_raw == "CONFIDENT_RECOMMENDATION" else "dim italic"
+        )
+        lines.append(
+            f"(Resolved via Clarification Loop • {loop_count} turn{'s' if loop_count > 1 else ''})\n",
+            style=resolution_style,
+        )
     else:
         lines.append(f"{action_label}\n", style=action_style)
     lines.append("  Confidence: ", style="dim")
@@ -192,7 +206,10 @@ def display_routing_result(decision: Any) -> None:
         lines.append("  Stated Urgency: ", style="dim")
         lines.append(f"{ee.stated_urgency}", style="yellow")
         lines.append(" → Real: ", style="dim")
-        lines.append(f"{ee.assessed_real_urgency}\n", style=URGENCY_STYLES.get(ee.assessed_real_urgency, ""))
+        lines.append(
+            f"{ee.assessed_real_urgency}\n",
+            style=URGENCY_STYLES.get(ee.assessed_real_urgency, ""),
+        )
 
         lines.append("  Symptom: ", style="dim")
         lines.append(f"{escape(ee.symptom_description)}\n")
@@ -225,17 +242,20 @@ def display_routing_result(decision: Any) -> None:
         for i, step in enumerate(trace, 1):
             lines.append(f"  {i}. {escape(step)}\n", style="dim")
 
-    console.print(Panel(
-        lines,
-        title="🎯 Triage Decision",
-        border_style="bright_blue",
-        padding=(0, 1),
-    ))
+    console.print(
+        Panel(
+            lines,
+            title="🎯 Triage Decision",
+            border_style="bright_blue",
+            padding=(0, 1),
+        )
+    )
 
 
 # ---------------------------------------------------------------------------
 # Clarification Questions
 # ---------------------------------------------------------------------------
+
 
 def display_clarification_questions(questions: list) -> None:
     """Render clarification questions in a styled panel.
@@ -257,17 +277,20 @@ def display_clarification_questions(questions: list) -> None:
         if why:
             lines.append(f"     Why: {escape(why)}\n", style="dim italic")
 
-    console.print(Panel(
-        lines,
-        title="❓ Clarification Required",
-        border_style="yellow",
-        padding=(0, 1),
-    ))
+    console.print(
+        Panel(
+            lines,
+            title="❓ Clarification Required",
+            border_style="yellow",
+            padding=(0, 1),
+        )
+    )
 
 
 # ---------------------------------------------------------------------------
 # Data Science Evaluation Metrics Dashboard (Parity with run_evaluation.py)
 # ---------------------------------------------------------------------------
+
 
 def display_metrics(metrics: dict, title_prefix: str = "Live Session") -> None:
     """Render the Data Science benchmark evaluation report.
@@ -284,7 +307,13 @@ def display_metrics(metrics: dict, title_prefix: str = "Live Session") -> None:
         title_prefix: Label indicating whether this is a Batch or Session report.
     """
     if not metrics or not metrics.get("evaluated_cases"):
-        console.print(Panel("  [dim]No evaluated cases with feedback recorded yet.[/dim]", title=f"📊 {title_prefix} Metrics", border_style="bright_cyan"))
+        console.print(
+            Panel(
+                "  [dim]No evaluated cases with feedback recorded yet.[/dim]",
+                title=f"📊 {title_prefix} Metrics",
+                border_style="bright_cyan",
+            )
+        )
         return
 
     total = metrics.get("total_cases", 0)
@@ -346,33 +375,61 @@ def display_metrics(metrics: dict, title_prefix: str = "Live Session") -> None:
 
     # Summary Panel
     summary_text = Text()
-    summary_text.append(f"  Evaluated Cases: {evaluated} of {total} total\n", style="bold")
-    summary_text.append(f"  Raw Accuracy:    {correct}/{evaluated} ({accuracy:.1%})\n\n", style="bold bright_white")
+    summary_text.append(
+        f"  Evaluated Cases: {evaluated} of {total} total\n", style="bold"
+    )
+    summary_text.append(
+        f"  Raw Accuracy:    {correct}/{evaluated} ({accuracy:.1%})\n\n",
+        style="bold bright_white",
+    )
 
     summary_text.append("  [Primary KPIs & Targets]\n", style="bold underline")
-    summary_text.append(f"  • Macro-Averaged F1:    {macro_f1:.3f}  (Target: >= 0.850) -> {f1_status}\n", style="cyan")
+    summary_text.append(
+        f"  • Macro-Averaged F1:    {macro_f1:.3f}  (Target: >= 0.850) -> {f1_status}\n",
+        style="cyan",
+    )
     summary_text.append(f"  • Weighted F1:          {weighted_f1:.3f}\n", style="dim")
-    summary_text.append(f"  • P1 Safety Recall:     {p1_rec*100:.1f}%  (Target: 100.0%) -> {safety_status}\n", style="red")
-    summary_text.append(f"  • P1 False Neg Rate:    {p1_fnr*100:.1f}%\n", style="dim")
+    summary_text.append(
+        f"  • P1 Safety Recall:     {p1_rec * 100:.1f}%  (Target: 100.0%) -> {safety_status}\n",
+        style="red",
+    )
+    summary_text.append(f"  • P1 False Neg Rate:    {p1_fnr * 100:.1f}%\n", style="dim")
     summary_text.append(f"  • Safety Cost Penalty:  {cost}\n", style="dim")
-    summary_text.append(f"  • Template Accuracy:    {temp_acc*100:.1f}%  (Target: >= 90.0%) -> {temp_status}\n", style="yellow")
-    summary_text.append(f"  • Mean Jaccard IoU:     {jaccard:.3f}  (Gap extraction overlap)\n", style="yellow")
-    summary_text.append(f"  • Brier Calibration:    {brier:.3f}  (Target: <= 0.100)\n", style="dim")
-    summary_text.append(f"  • Expected Calib Error: {ece:.3f}  (Target: <= 0.100)\n", style="dim")
-    summary_text.append(f"  • Clarif. Specificity:  {spec:.3f}  | Redundancy: {redun:.3f} | CR: {cr:.1%}\n", style="dim")
+    summary_text.append(
+        f"  • Template Accuracy:    {temp_acc * 100:.1f}%  (Target: >= 90.0%) -> {temp_status}\n",
+        style="yellow",
+    )
+    summary_text.append(
+        f"  • Mean Jaccard IoU:     {jaccard:.3f}  (Gap extraction overlap)\n",
+        style="yellow",
+    )
+    summary_text.append(
+        f"  • Brier Calibration:    {brier:.3f}  (Target: <= 0.100)\n", style="dim"
+    )
+    summary_text.append(
+        f"  • Expected Calib Error: {ece:.3f}  (Target: <= 0.100)\n", style="dim"
+    )
+    summary_text.append(
+        f"  • Clarif. Specificity:  {spec:.3f}  | Redundancy: {redun:.3f} | CR: {cr:.1%}\n",
+        style="dim",
+    )
 
-    console.print(Panel(
-        summary_text,
-        title=f"📊 {title_prefix} Benchmark Evaluation Report",
-        border_style="bright_cyan",
-        padding=(0, 1),
-    ))
+    console.print(
+        Panel(
+            summary_text,
+            title=f"📊 {title_prefix} Benchmark Evaluation Report",
+            border_style="bright_cyan",
+            padding=(0, 1),
+        )
+    )
 
     console.print(action_table)
     console.print()
 
 
-def display_batch_notification(batch_number: int, batch_size: int, report_path: str) -> None:
+def display_batch_notification(
+    batch_number: int, batch_size: int, report_path: str
+) -> None:
     """Display a banner when a batch evaluation completes.
 
     Args:
@@ -391,6 +448,7 @@ def display_batch_notification(batch_number: int, batch_size: int, report_path: 
 # Session History
 # ---------------------------------------------------------------------------
 
+
 def display_session_history(cases: list) -> None:
     """Render all session cases as a summary table.
 
@@ -401,7 +459,13 @@ def display_session_history(cases: list) -> None:
         console.print("  [dim]No cases recorded yet.[/dim]\n")
         return
 
-    t = Table(title="📜 Session History", show_header=True, header_style="bold", border_style="dim", box=rich.box.ROUNDED)
+    t = Table(
+        title="📜 Session History",
+        show_header=True,
+        header_style="bold",
+        border_style="dim",
+        box=rich.box.ROUNDED,
+    )
     t.add_column("#", justify="right", style="bold")
     t.add_column("Query", max_width=50)
     t.add_column("Template")
@@ -411,7 +475,9 @@ def display_session_history(cases: list) -> None:
 
     for c in cases:
         query_short = c.raw_text[:50] + ("…" if len(c.raw_text) > 50 else "")
-        _, action_style = ACTION_STYLES.get(c.predicted_action, (c.predicted_action, ""))
+        _, action_style = ACTION_STYLES.get(
+            c.predicted_action, (c.predicted_action, "")
+        )
 
         if c.is_correct is True:
             correct_str = Text("✅", style="green")
@@ -437,6 +503,7 @@ def display_session_history(cases: list) -> None:
 # Eval Toggle & Feedback
 # ---------------------------------------------------------------------------
 
+
 def display_eval_toggle(is_active: bool) -> None:
     """Display a message indicating eval mode was toggled.
 
@@ -444,21 +511,29 @@ def display_eval_toggle(is_active: bool) -> None:
         is_active: The new evaluation mode state.
     """
     if is_active:
-        console.print(Panel(
-            "  Evaluation mode: [bold green]ON[/bold green]\n"
-            "  [dim]Batches of 3 cases will automatically trigger Data Science benchmark matrices.[/dim]",
-            border_style="green", padding=(0, 1),
-        ))
+        console.print(
+            Panel(
+                "  Evaluation mode: [bold green]ON[/bold green]\n"
+                "  [dim]Batches of 3 cases will automatically trigger Data Science benchmark matrices.[/dim]",
+                border_style="green",
+                padding=(0, 1),
+            )
+        )
     else:
-        console.print(Panel(
-            "  Evaluation mode: [dim]OFF[/dim]",
-            border_style="dim", padding=(0, 1),
-        ))
+        console.print(
+            Panel(
+                "  Evaluation mode: [dim]OFF[/dim]",
+                border_style="dim",
+                padding=(0, 1),
+            )
+        )
 
 
 def prompt_feedback(
-    template_ids: list[str]
-) -> Tuple[Optional[bool], Optional[str], Optional[str], Optional[str], Optional[List[str]]]:
+    template_ids: list[str],
+) -> Tuple[
+    Optional[bool], Optional[str], Optional[str], Optional[str], Optional[List[str]]
+]:
     """Interactive feedback collection after a routing result.
 
     Gathers ground truth dynamically for the Data Science matrices:
@@ -492,7 +567,10 @@ def prompt_feedback(
     for i, tid in enumerate(template_ids, 1):
         console.print(f"    {i}. {tid}")
 
-    tmpl_choice = Prompt.ask("  Select correct template (enter number or leave blank to keep predicted)", default="")
+    tmpl_choice = Prompt.ask(
+        "  Select correct template (enter number or leave blank to keep predicted)",
+        default="",
+    )
     expected_template = None
     if tmpl_choice.isdigit():
         idx = int(tmpl_choice) - 1
@@ -501,7 +579,14 @@ def prompt_feedback(
 
     expected_action_short = Prompt.ask(
         "  Expected routing action?",
-        choices=["CONFIDENT", "CLARIFY", "HUMAN", "CONFIDENT_RECOMMENDATION", "NEEDS_CLARIFICATION", "ROUTE_TO_HUMAN"],
+        choices=[
+            "CONFIDENT",
+            "CLARIFY",
+            "HUMAN",
+            "CONFIDENT_RECOMMENDATION",
+            "NEEDS_CLARIFICATION",
+            "ROUTE_TO_HUMAN",
+        ],
         default="CONFIDENT",
         case_sensitive=False,
     ).upper()
@@ -519,16 +604,25 @@ def prompt_feedback(
         case_sensitive=False,
     ).upper()
 
-    missing_input = Prompt.ask("  Expected missing fields? (comma-separated, or Enter for none)", default="").strip()
-    expected_missing = [f.strip() for f in missing_input.split(",") if f.strip()] if missing_input else []
+    missing_input = Prompt.ask(
+        "  Expected missing fields? (comma-separated, or Enter for none)", default=""
+    ).strip()
+    expected_missing = (
+        [f.strip() for f in missing_input.split(",") if f.strip()]
+        if missing_input
+        else []
+    )
 
-    console.print("  ✏️  [dim]Feedback and ground truth logged for batch evaluation.[/dim]\n")
+    console.print(
+        "  ✏️  [dim]Feedback and ground truth logged for batch evaluation.[/dim]\n"
+    )
     return False, expected_template, expected_action, expected_urgency, expected_missing
 
 
 # ---------------------------------------------------------------------------
 # Final Summary & Utilities
 # ---------------------------------------------------------------------------
+
 
 def display_final_summary(metrics: dict, report_path: str) -> None:
     """Display the final session summary on exit.
@@ -538,7 +632,9 @@ def display_final_summary(metrics: dict, report_path: str) -> None:
         report_path: Path where the final report was saved.
     """
     display_metrics(metrics, title_prefix="Final Session")
-    console.print(f"  📁 [dim]Complete session report saved to:[/dim] [cyan]{escape(report_path)}[/cyan]\n")
+    console.print(
+        f"  📁 [dim]Complete session report saved to:[/dim] [cyan]{escape(report_path)}[/cyan]\n"
+    )
 
 
 def display_error(message: str) -> None:
@@ -547,12 +643,14 @@ def display_error(message: str) -> None:
     Args:
         message: The error message to display.
     """
-    console.print(Panel(
-        f"  {escape(message)}",
-        title="❌ Error",
-        border_style="red",
-        padding=(0, 1),
-    ))
+    console.print(
+        Panel(
+            f"  {escape(message)}",
+            title="❌ Error",
+            border_style="red",
+            padding=(0, 1),
+        )
+    )
 
 
 def get_thinking_status():

@@ -1,4 +1,4 @@
-from typing import List, Dict, Any, Optional
+from typing import List
 from src.core.state import TriageState
 from src.models import GapAndConflictResult
 from src.catalogue import ServiceCatalogue
@@ -21,8 +21,9 @@ FIELD_MAPPING = {
     "drawings_or_spec_available": "symptom_description",
     "door_or_entry_point": "specific_equipment",
     "is_the_premises_currently_unsecured": "symptom_description",
-    "task_description": "symptom_description"
+    "task_description": "symptom_description",
 }
+
 
 def gap_and_conflict_node(state: TriageState) -> TriageState:
     """
@@ -32,12 +33,14 @@ def gap_and_conflict_node(state: TriageState) -> TriageState:
     """
     if "audit_trace" not in state:
         state["audit_trace"] = []
-        
+
     extracted = state.get("extracted_entities")
     match_result = state.get("match_result")
-    
+
     if not extracted or not match_result:
-        state["audit_trace"].append("Gap Node aborted: Missing required state (extracted_entities or match_result).")
+        state["audit_trace"].append(
+            "Gap Node aborted: Missing required state (extracted_entities or match_result)."
+        )
         return state
 
     missing_fields: List[str] = []
@@ -49,9 +52,13 @@ def gap_and_conflict_node(state: TriageState) -> TriageState:
     if len(candidates) >= 2:
         top1 = candidates[0]
         top2 = candidates[1]
-        
+
         # Cross-Trade Tie Logic from SDD 5.1
-        if top1.category != top2.category and top1.signal_score >= 0.65 and (top1.signal_score - top2.signal_score) <= 0.15:
+        if (
+            top1.category != top2.category
+            and top1.signal_score >= 0.65
+            and (top1.signal_score - top2.signal_score) <= 0.15
+        ):
             is_cross_trade = True
             conflict_msg = f"Cross-trade collision detected between {top1.category} ({top1.signal_score}) and {top2.category} ({top2.signal_score})."
             detected_conflicts.append(conflict_msg)
@@ -59,43 +66,51 @@ def gap_and_conflict_node(state: TriageState) -> TriageState:
 
     # 2. Evaluate Missing Required Fields Diff
     if match_result.is_out_of_catalogue or not match_result.top_template_id:
-        state["audit_trace"].append("Gap Node: Bypassing field diff because request is out-of-catalogue.")
+        state["audit_trace"].append(
+            "Gap Node: Bypassing field diff because request is out-of-catalogue."
+        )
     else:
         # Find the selected template in O(1) via the singleton hash map
         catalogue = ServiceCatalogue()
-        
+
         # Verify the template exists in O(1)
         if catalogue.get_template_by_id(match_result.top_template_id):
             # Fetch just the required fields list using the helper method
-            required_fields = catalogue.get_required_fields(match_result.top_template_id)
-            
+            required_fields = catalogue.get_required_fields(
+                match_result.top_template_id
+            )
+
             for req_field in required_fields:
                 model_field = FIELD_MAPPING.get(req_field, req_field)
                 val = None
-                
+
                 if model_field == "safety_assessment":
                     if extracted.safety_assessment:
                         val = True
                 else:
                     val = getattr(extracted, model_field, None)
-                
+
                 # If None, empty string, or empty list
                 if not val:
                     missing_fields.append(req_field)
-                        
-            state["audit_trace"].append(f"Gap Node: Missing required fields determined: {missing_fields}")
+
+            state["audit_trace"].append(
+                f"Gap Node: Missing required fields determined: {missing_fields}"
+            )
         else:
-            state["audit_trace"].append(f"Gap Node Warning: Template {match_result.top_template_id} not found in catalogue.")
+            state["audit_trace"].append(
+                f"Gap Node Warning: Template {match_result.top_template_id} not found in catalogue."
+            )
 
     # 3. Create Result Model
     gap_result = GapAndConflictResult(
         missing_required_fields=missing_fields,
         detected_conflicts=detected_conflicts,
-        is_cross_trade_collision=is_cross_trade
+        is_cross_trade_collision=is_cross_trade,
     )
-    
+
     if "initial_missing_fields" not in state:
         state["initial_missing_fields"] = missing_fields.copy()
-        
+
     state["gap_result"] = gap_result
     return state

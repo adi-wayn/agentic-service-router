@@ -32,6 +32,7 @@ INSTRUCTIONS:
 Respond strictly according to the ExtractedEntities JSON schema.
 """
 
+
 def build_extractor_user_prompt(request_text: str) -> str:
     return f"""Please analyze the following inbound service request and extract the required entities according to your instructions.
 
